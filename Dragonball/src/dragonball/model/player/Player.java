@@ -1,15 +1,19 @@
 package dragonball.model.player;
 
+import java.util.ArrayList;
+
+import dragonball.model.character.fighter.PlayableFighter;
+
 public class Player {
 	
-	private String name;
+	private String name; //name of the player
 	private ArrayList<PlayableFighter> fighters; //number of fighters you have
 	private ArrayList<SuperAttack> 	superAttacks; //unlocked super-attacks
 	private ArryList<UltimateAttack> ultimateAttakcs; //unlocked ultimate-attacks
-	private int senzuBeans;
+	private int senzuBeans;  
 	private int dragonbBalls;
-	private PlayableFighter activeFighter;
-	private int exploredMaps;
+	private PlayableFighter activeFighter; //current fighter
+	private int exploredMaps; //number of maps explored
 	
 	public Player(String name){
 		this.name=name;
