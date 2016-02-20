@@ -2,6 +2,8 @@ package dragonball.model.character.fighter;
 
 import java.util.ArrayList;
 
+import dragonball.model.character.PlayableCharacter;
+
 abstract public  class PlayableFighter extends Fighter implements PlayableCharacter {
 	private int xp;
 	private int targetXp;

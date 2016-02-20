@@ -1,10 +1,10 @@
 package dragonball.model.character.fighter;
-
+import dragonball.model.battle.BattleOpponent;
 import java.util.ArrayList;
 
 import dragonball.model.character.Character;
 
-public class Fighter extends Character implements BattleOponent  {
+public class Fighter extends Character implements BattleOpponent  {
 	
 	private int level;
 	private int blastDamage; 
