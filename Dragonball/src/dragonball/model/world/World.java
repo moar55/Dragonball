@@ -6,15 +6,23 @@ import dragonball.model.character.fighter.NonPlayableFighter;
 import dragonball.model.cell.*;
 
 public class World {
-	Cell [][] map;
-	int playerColumn;
-	int playerRow;
+	private Cell [][] map;
+	private int playerColumn;
+	private int playerRow;
 	
 	
 	public World(){
 		this.map=new Cell[10][10];
 	}
-	
+	public Cell[][] getmap(){
+		return map;
+	}
+	public int getplayerColumn(){
+		return playerColumn;
+	}
+	public int getplayerRow(){
+		return playerRow;
+	}
 
 	public void generateMap(ArrayList<NonPlayableFighter> weakFoes, ArrayList<NonPlayableFighter>
 	strongFoes){
