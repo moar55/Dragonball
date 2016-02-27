@@ -11,14 +11,14 @@ public class CollectibleCell extends Cell {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		if(collectible==Collectible.SENZU_BEANS)
+		if(collectible==Collectible.SENZU_BEAN)
 			return "[s]";
 		
 		else 
 			return "[d]";
 	}
 
-	public Collectible getCollectibleType() {
+	public Collectible getCollectible() {
 		return collectible;
 	}
 	

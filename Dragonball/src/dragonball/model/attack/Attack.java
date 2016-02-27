@@ -7,10 +7,10 @@ public class Attack {
 		this.name =name;
 		this.damage=damage;
 	}
-	public String getAttackname(){
+	public String getName(){
 		return name;
 	}
-	public int getAttackdamage(){
+	public int getDamage(){
 		return damage;
 	}
 }

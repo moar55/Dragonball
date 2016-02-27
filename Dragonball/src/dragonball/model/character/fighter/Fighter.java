@@ -1,4 +1,5 @@
 package dragonball.model.character.fighter;
+import dragonball.model.attack.*;
 import dragonball.model.battle.BattleOpponent;
 import java.util.ArrayList;
 
@@ -8,14 +9,14 @@ public class Fighter extends Character implements BattleOpponent  {
 	
 	private int level;
 	private int blastDamage; 
-	private int phsyicalDamage;
+	private int physicalDamage;
 	private int healthPoints;
 	private int maxHealthPoints;
 	private int ki;	
 	private int maxKi;
 	private int stamina;
 	int maxStamina;
-	private ArrayList<SuperAttacks>superAttacks;
+	private ArrayList<SuperAttack>superAttacks;
 	private ArrayList<UltimateAttack>ultimateAttacks;
 	
 	public Fighter(String name, int level, int maxHealthPoints, int blastDamage,
@@ -41,12 +42,12 @@ public class Fighter extends Character implements BattleOpponent  {
 		this.blastDamage = blastDamage;
 	}
 
-	public int getPhsyicalDamage() {
-		return phsyicalDamage;
+	public int getPhysicalDamage() {
+		return physicalDamage;
 	}
 
-	public void setPhsyicalDamage(int phsyicalDamage) {
-		this.phsyicalDamage = phsyicalDamage;
+	public void setPhysicalDamage(int physicalDamage) {
+		this.physicalDamage = physicalDamage;
 	}
 
 	public int getHealthPoints() {
@@ -89,11 +90,11 @@ public class Fighter extends Character implements BattleOpponent  {
 		this.stamina = stamina;
 	}
 
-	public ArrayList<SuperAttacks> getSuperAttacks() {
+	public ArrayList<SuperAttack> getSuperAttacks() {
 		return superAttacks;
 	}
 
-	public void setSuperAttacks(ArrayList<SuperAttacks> superAttacks) {
+	public void setSuperAttacks(ArrayList<SuperAttack> superAttacks) {
 		this.superAttacks = superAttacks;
 	}
 

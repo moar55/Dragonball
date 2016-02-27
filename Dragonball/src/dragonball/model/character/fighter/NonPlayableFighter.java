@@ -1,5 +1,8 @@
 package dragonball.model.character.fighter;
 
+import java.util.ArrayList;
+
+import dragonball.model.attack.*;
 import dragonball.model.character.NonPlayableCharacter;
 
 public class NonPlayableFighter extends Fighter implements NonPlayableCharacter{
@@ -11,7 +14,7 @@ public class NonPlayableFighter extends Fighter implements NonPlayableCharacter{
 		this.strong=strong;
 		
 	}
-	public boolean getstrong() {
+	public boolean isStrong() {
 		return strong;
 	}
 }

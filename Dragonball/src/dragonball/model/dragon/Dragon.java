@@ -1,5 +1,9 @@
 package dragonball.model.dragon;
 
+import java.util.ArrayList;
+
+import dragonball.model.attack.*;
+
 public class Dragon {
 	String name;
 	ArrayList<SuperAttack> superAttacks;
@@ -12,5 +16,22 @@ public class Dragon {
 		this.senzuBeans=senzuBeans;
 		this.abilityPoints=abilityPoints;
 	}
+	public String getName() {
+		return name;
+	}
+	public ArrayList<SuperAttack> getSuperAttacks() {
+		return superAttacks;
+	}
+	public ArrayList<UltimateAttack> getUltimateAttacks() {
+		return ultimateAttacks;
+	}
+	public int getSenzuBeans() {
+		return senzuBeans;
+	}
+	public int getAbilityPoints() {
+		return abilityPoints;
+	}
+	
+	
 
 }

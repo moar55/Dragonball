@@ -32,7 +32,7 @@ public class World {
 				map[i][j]=new EmptyCell();
 		
 		//Random strongFoe at (0,0)
-		this.map[0][0]=new FoeCell(strongFoes.get((int)(Math.random()*(strongFoes.size()+1))),'b');
+		this.map[0][0]=new FoeCell(strongFoes.get((int)(Math.random()*(strongFoes.size()+1))));
 			
 		
 		
@@ -50,7 +50,7 @@ public class World {
 				 y=(int) Math.random()*10;
 				
 				if(x!=9 && y!=9 && map[x][y].toString()=="[]"){
-					map[x][y]=new FoeCell(weakFoes.get((int)(Math.random()*(weakFoes.size()+1))),'w');
+					map[x][y]=new FoeCell(weakFoes.get((int)(Math.random()*(weakFoes.size()+1))));
 					counter++;
 					}
 				}
@@ -73,7 +73,7 @@ public class World {
 				 y=(int) Math.random()*10;
 				 
 				 if(x!=9 && y!=9 && map[x][y].toString()=="[]"){
-					 map[x][y]=new CollectibleCell(Collectible.SENZU_BEANS);
+					 map[x][y]=new CollectibleCell(Collectible.SENZU_BEAN);
 					 i++;
 				 }
 			}
@@ -84,7 +84,7 @@ public class World {
 				 x=(int)Math.random()*10;
 				 y=(int) Math.random()*10;
 				 if(x!=9 && y!=9 && map[x][y].toString()=="[]"){
-					 map[x][y]=new CollectibleCell(Collectible.DRAGON_BALLS);
+					 map[x][y]=new CollectibleCell(Collectible.DRAGON_BALL);
 					 break;
 				 }
 			}
@@ -92,6 +92,18 @@ public class World {
 			
 			
 			
+	}
+	
+	public String toString(){
+		String x="";
+		
+		for(int i=0;i<10;i++){
+			for(int j=0;j<10;j++)
+				x=map[i][j]+" ";
+			x+="\n";
+		}
+		return x;
+		
 	}
 	
 	

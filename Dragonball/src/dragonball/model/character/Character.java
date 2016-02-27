@@ -1,11 +1,15 @@
 package dragonball.model.character;
 
 abstract public class Character {
-	String name;
+	private String name;
 	
 	public Character(String name){
 		this.name=name;
 		
+	}
+
+	public String getName() {
+		return name;
 	}
 	
 	

@@ -1,5 +1,5 @@
 package dragonball.model.cell;
 
 public enum Collectible {
-	SENZU_BEANS,DRAGON_BALLS;
+	SENZU_BEAN,DRAGON_BALL;
 }

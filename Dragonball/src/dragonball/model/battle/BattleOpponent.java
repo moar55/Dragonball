@@ -2,8 +2,9 @@ package dragonball.model.battle;
 
 import java.util.ArrayList;
 
-import dragonball.model.character.fighter.SuperAttacks;
-import dragonball.model.character.fighter.UltimateAttack;
+import dragonball.model.attack.*;
+
+
 
 public interface BattleOpponent {
 
@@ -11,7 +12,7 @@ public interface BattleOpponent {
 
 	public int getBlastDamage();
 
-	public int getPhsyicalDamage();
+	public int getPhysicalDamage();
 	
 	public int getHealthPoints();
 
@@ -29,7 +30,7 @@ public interface BattleOpponent {
 
 	public void setStamina(int stamina);
 
-	public ArrayList<SuperAttacks> getSuperAttacks();
+	public ArrayList<SuperAttack> getSuperAttacks();
 	
 	public ArrayList<UltimateAttack> getUltimateAttacks();
 

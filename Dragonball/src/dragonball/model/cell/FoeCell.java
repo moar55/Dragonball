@@ -4,31 +4,27 @@ import dragonball.model.character.fighter.NonPlayableFighter;
 
 public class FoeCell  extends Cell{
  
-	private char foeType;
 	private NonPlayableFighter foe;
 	
-	public FoeCell(NonPlayableFighter foe,char foeType){
-		this.foeType=foeType;
+	public FoeCell(NonPlayableFighter foe){
 		this.foe=foe;
 	}
 	
 		@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		if(foeType=='w')
-			return "[w]";
+		if(foe.isStrong())
+			return "[b]";
 		
 		else
-			return "[b]";
+			return "[w]";
 	}
 
 		public NonPlayableFighter getFoe() {
 			return foe;
 		}
 
-		public char getFoeType() {
-			return foeType;
-		}
+
 
 		
 	
