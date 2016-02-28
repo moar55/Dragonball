@@ -2,7 +2,7 @@ package dragonball.model.attack;
 
 public class PhysicalAttack extends Attack  {
 
-	public PhysicalAttack(String name, int damage) {
+	public PhysicalAttack() {
 		super("PhysicalAttack", 50);
 		
 	}

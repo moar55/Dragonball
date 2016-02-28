@@ -9,12 +9,19 @@ public class Frieza extends PlayableFighter	{
 	static ArrayList<SuperAttack> superAttacks=new ArrayList<SuperAttack>();
 	static ArrayList<UltimateAttack> ultimateAttacks= new ArrayList<UltimateAttack>();
 	
+	public Frieza(String name, int level, int xp, int targetXp, int maxHealthPoints,
+			int blastDamage, int physicalDamage, int abilityPoints, int maxKi, int maxStamina,
+			ArrayList<SuperAttack> superAttacks, ArrayList<UltimateAttack> ultimateAttacks){
+			super(name,level,xp,targetXp,maxHealthPoints,blastDamage,physicalDamage,abilityPoints,maxKi,maxStamina,superAttacks,ultimateAttacks);
+			
+		
+	}
 	public Frieza(String name){
 
-		/*constructing attributes in the form:name,1,0,10,maxHealthPoints,blastDamage,physicalDamage,0,maxKi,maxStamina,superAttacks,ultimateAttacks
+		/*constructing attributes in the form:name,maxHealthPoints,blastDamage,physicalDamage,0,maxKi,maxStamina,superAttacks,ultimateAttacks
 		This line initializes this class with then 2nd Constructor of the PlayableFighter
 				*/
-		super(name,1,0,10,1100,75,75,0,4,4,superAttacks,ultimateAttacks); 
+		super(name,1100,75,75,4,4,superAttacks,ultimateAttacks); 
 
 	}
 }

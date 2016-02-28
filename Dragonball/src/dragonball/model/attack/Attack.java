@@ -1,6 +1,6 @@
 package dragonball.model.attack;
 
-public class Attack {
+abstract public class Attack {
 	private  String name;
 	 private int damage;
 	public Attack(String name, int damage){

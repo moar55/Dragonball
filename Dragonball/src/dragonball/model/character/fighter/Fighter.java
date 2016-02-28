@@ -24,6 +24,19 @@ public class Fighter extends Character implements BattleOpponent  {
 		ArrayList<UltimateAttack> ultimateAttacks)  {
 		
 		 super(name);
+		 this.level=level;
+		 this.blastDamage=blastDamage;
+		 this.physicalDamage=physicalDamage;
+		 this.healthPoints=maxHealthPoints;
+		 this.maxHealthPoints=maxHealthPoints;
+		 this.ki=0;
+		 this.maxKi=maxKi;
+		 this.stamina=maxStamina;
+		 this.maxStamina=maxStamina;
+		 this.superAttacks=superAttacks;
+		 this.ultimateAttacks=ultimateAttacks;
+		 
+		 
 	 }
 	
 	public int getLevel() {

@@ -14,13 +14,13 @@ public class World {
 	public World(){
 		this.map=new Cell[10][10];
 	}
-	public Cell[][] getmap(){
+	public Cell[][] getMap(){
 		return map;
 	}
-	public int getplayerColumn(){
+	public int getPlayerColumn(){
 		return playerColumn;
 	}
-	public int getplayerRow(){
+	public int getPlayerRow(){
 		return playerRow;
 	}
 
@@ -32,9 +32,8 @@ public class World {
 				map[i][j]=new EmptyCell();
 		
 		//Random strongFoe at (0,0)
-		this.map[0][0]=new FoeCell(strongFoes.get((int)(Math.random()*(strongFoes.size()+1))));
+		this.map[0][0]=new FoeCell(strongFoes.get((int)((Math.random()*(strongFoes.size())))));
 			
-		
 		
 			int x,y; //coordinates
 			
@@ -46,21 +45,19 @@ public class World {
 			//Setting weak foes.
 				for(int counter =0;counter<15;){
 				
-				 x=(int)Math.random()*10;
-				 y=(int) Math.random()*10;
-				
-				if(x!=9 && y!=9 && map[x][y].toString()=="[]"){
-					map[x][y]=new FoeCell(weakFoes.get((int)(Math.random()*(weakFoes.size()+1))));
+				 x=(int)(Math.random()*10);
+				 y=(int) (Math.random()*10);
+				 if(x!=9 && y!=9 && map[x][y].toString().equals("[ ]")){
+					map[x][y]=new FoeCell(weakFoes.get((int)((Math.random()*(weakFoes.size())))));
 					counter++;
 					}
 				}
-			
 				
 	int numofSenzu;
 	//Generating number of senzubeans
 			
 		   do{
-			 numofSenzu=(int)Math.random()*6;
+			 numofSenzu=(int)(Math.random()*6);
 			 if(numofSenzu<=5 && numofSenzu>=3)
 				 break;
 			}
@@ -69,26 +66,27 @@ public class World {
 	//assigning senzubeans		
 			for (int i = 0; i < numofSenzu; ) {
 				
-				 x=(int)Math.random()*10;
-				 y=(int) Math.random()*10;
+				 x=(int)(Math.random()*10);
+				 y=(int) (Math.random()*10);
 				 
-				 if(x!=9 && y!=9 && map[x][y].toString()=="[]"){
+				 if(x!=9 && y!=9 && map[x][y].toString().equals("[ ]")){
 					 map[x][y]=new CollectibleCell(Collectible.SENZU_BEAN);
 					 i++;
 				 }
 			}
 			
-			
+
 			
 			do{
-				 x=(int)Math.random()*10;
-				 y=(int) Math.random()*10;
-				 if(x!=9 && y!=9 && map[x][y].toString()=="[]"){
+				 x=(int)(Math.random()*10);
+				 y=(int) (Math.random()*10);
+				 if(x!=9 && y!=9 && map[x][y].toString().equals("[ ]")){
 					 map[x][y]=new CollectibleCell(Collectible.DRAGON_BALL);
 					 break;
 				 }
 			}
 			while(true);
+			
 			
 			
 			
@@ -105,6 +103,8 @@ public class World {
 		return x;
 		
 	}
+	
+
 	
 	
 }

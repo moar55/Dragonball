@@ -13,9 +13,13 @@ public class Dragon {
 	public Dragon(String name, ArrayList<SuperAttack> superAttacks, ArrayList<UltimateAttack>
 	ultimateAttacks, int senzuBeans, int abilityPoints){
 		this.name=name;
+		this.superAttacks=superAttacks;
+		this.ultimateAttacks=ultimateAttacks;
 		this.senzuBeans=senzuBeans;
 		this.abilityPoints=abilityPoints;
+		
 	}
+	
 	public String getName() {
 		return name;
 	}
