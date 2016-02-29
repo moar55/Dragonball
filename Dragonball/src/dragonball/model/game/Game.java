@@ -102,15 +102,16 @@ public static int numOfLines(String filePath) throws IOException{
 			first=null;
 			for(int j=0;j<3;j++,i++){
 				if(j==0)
-					first=result[i];	
+					first=result[i];	//first line of input (non-attacks)
 					
 				if(j==1){
-					
+			//if superattack is a maximum charge		
 					for(int k=0;k<result[i].length;k++){ 
 						if(result[i][k].equals("Maximum Charge"))
 							superAttacks.add(new MaximumCharge());
 						
-						else{
+						else{ 
+							//searching for the damage in the attacks arraylist
 							int x=0;
 							for(int counter=0;counter<attacks.size();counter++)
 									if(result[i][k].equals(attacks.get(counter).getName()))
@@ -126,11 +127,12 @@ public static int numOfLines(String filePath) throws IOException{
 				
 				if(j==2){
 					for(int k=0;k<result[i].length;k++ ){
-
+						//Ultimate attack is a super saiyan
 						if(result[i][k].equals("Super Saiyan"))
 							ultimateAttacks.add(new SuperSaiyan());
 						
 						else{
+							//Search for value of the damage of the ultimate attack in attacks arraylist
 							int x=0;
 							for(int counter=0;counter<attacks.size();counter++)
 									if(result[i][k].equals(attacks.get(counter).getName()))

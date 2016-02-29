@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import dragonball.model.character.Character;
 
-public class Fighter extends Character implements BattleOpponent  {
+abstract  public class Fighter extends Character implements BattleOpponent  {
 	
 	private int level;
 	private int blastDamage; 
@@ -15,7 +15,7 @@ public class Fighter extends Character implements BattleOpponent  {
 	private int ki;	
 	private int maxKi;
 	private int stamina;
-	int maxStamina;
+	private int maxStamina;
 	private ArrayList<SuperAttack>superAttacks;
 	private ArrayList<UltimateAttack>ultimateAttacks;
 	

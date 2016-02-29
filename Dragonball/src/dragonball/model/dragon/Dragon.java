@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import dragonball.model.attack.*;
 
 public class Dragon {
-	String name;
-	ArrayList<SuperAttack> superAttacks;
-	ArrayList<UltimateAttack> ultimateAttacks;
-	int senzuBeans;
-	int abilityPoints;
+	private String name;
+	private ArrayList<SuperAttack> superAttacks;
+	private ArrayList<UltimateAttack> ultimateAttacks;
+	private int senzuBeans;
+	private int abilityPoints;
 	public Dragon(String name, ArrayList<SuperAttack> superAttacks, ArrayList<UltimateAttack>
 	ultimateAttacks, int senzuBeans, int abilityPoints){
 		this.name=name;

@@ -18,6 +18,9 @@ public class Player {
 	
 	public Player(String name){
 		this.name=name;
+		this.fighters=new ArrayList<PlayableFighter>();
+		superAttacks=new ArrayList<SuperAttack>();
+		ultimateAttacks=new ArrayList<UltimateAttack>();
 	}
 	
 	public Player(String name, ArrayList<PlayableFighter> fighters, ArrayList<SuperAttack>
