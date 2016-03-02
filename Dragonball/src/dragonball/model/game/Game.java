@@ -145,7 +145,7 @@ public static int numOfLines(String filePath) throws IOException{
 					}
 				}
 				}
-			
+			//initialization of variables duuuh :D
 			dragons.add(new Dragon(first[0],superAttacks,ultimateAttacks,Integer.parseInt(first[1]),Integer.parseInt(first[2])));		
 		}
 	}
