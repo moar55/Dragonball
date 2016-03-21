@@ -3,18 +3,23 @@ package dragonball.model.player;
 import java.util.ArrayList;
 
 import dragonball.model.attack.*;
+import dragonball.model.character.fighter.*;
 import dragonball.model.character.fighter.PlayableFighter;
+import dragonball.model.dragon.DragonWish;
+import dragonball.model.dragon.DragonWishType;
+import dragonball.model.game.GameListener;
 
 public class Player {
 	
 	private String name; //name of the player
-	private ArrayList<PlayableFighter> fighters; //number of fighters you have
+	private ArrayList<PlayableFighter> fighters; // fighters you have
 	private ArrayList<SuperAttack> 	superAttacks; //unlocked super-attacks
 	private ArrayList<UltimateAttack> ultimateAttacks; //unlocked ultimate-attacks
 	private int senzuBeans;  
 	private int dragonBalls; 
 	private PlayableFighter activeFighter; //current fighter
 	private int exploredMaps; //number of maps explored
+	private  PlayerListener listener;
 	
 	public Player(String name){
 		this.name=name;
@@ -84,6 +89,7 @@ public class Player {
 	public void setDragonBalls(int dragonBalls) {
 		this.dragonBalls = dragonBalls;
 	}
+	
 
 	public PlayableFighter getActiveFighter() {
 		return activeFighter;
@@ -100,8 +106,95 @@ public class Player {
 	public void setExploredMaps(int exploredMaps) {
 		this.exploredMaps = exploredMaps;
 	}
+
+	public int getMaxFighterLevel(){
+		int max=-1;
+		for(int i=0;i<fighters.size();i++)
+			if(fighters.get(i).getLevel()>max)
+				max=fighters.get(i).getLevel();
+		
+		return max;	
+	}
+	
+	public void callDragon(){
+		if(listener!=null)
+			listener.onDragonCalled();
+	}
+	
+	public void chooseWish(DragonWish wish){
+		listener.onWishChosen(wish);
+			
+	}
+	
+	public void createFighter(char race,String name){
+		
+		switch(race){
+		case 'E':fighters.add(new Earthling(name));break;
+		case 'S': fighters.add(new Saiyan(name));break;
+		case 'N': fighters.add(new Namekian(name));break;
+		case 'F': fighters.add(new Frieza(name));break;
+		case 'M': fighters.add(new Majin(name));break;
+		}
+		
+		if(fighters.size()==1)
+			activeFighter=fighters.get(0);
+	}
+	
+	public void upgradeFighter(PlayableFighter fighter, char fighterAttribute){
+		
+		switch(fighterAttribute){
+		case 'H':fighter.setMaxHealthPoints(fighter.getMaxHealthPoints()+50);break;
+		case 'B': fighter.setBlastDamage(fighter.getBlastDamage()+50);break;
+		case 'P': fighter.setPhysicalDamage(fighter.getPhysicalDamage()+50);break;
+		case 'K': fighter.setKi(fighter.getMaxKi()+1);break;
+		case 'S' : fighter.setStamina(fighter.getMaxStamina()+1);break;
+		}
+	}
+	
+	public void assignAttack(PlayableFighter fighter, SuperAttack newAttack, SuperAttack oldAttack){
+		
+		ArrayList<SuperAttack>superAttacks=fighter.getSuperAttacks();
+		int j=0;
+		
+			while(!(oldAttack.getName().equals(superAttacks.get(j).getName())) && j<superAttacks.size())
+				j++;
+		
+		if(oldAttack!=null)
+			superAttacks.add(j, newAttack);
+		
+		else if(superAttacks.size()<4)
+			superAttacks.add(newAttack);
+		
+		fighter.setSuperAttacks(superAttacks);
+			
+		}
+	
+	void assignAttack(PlayableFighter fighter, UltimateAttack newAttack, UltimateAttack oldAttack){
+		
+		ArrayList<UltimateAttack>ultimateAttacks=fighter.getUltimateAttacks();
+		int j=0;
+		
+			while(!(oldAttack.getName().equals(ultimateAttacks.get(j).getName())) && j<ultimateAttacks.size())
+				j++;
+		
+			
+		if(oldAttack!=null)
+			ultimateAttacks.add(j, newAttack);
+		
+		else if(ultimateAttacks.size()<2)
+			ultimateAttacks.add(newAttack);
+		
+		fighter.setUltimateAttacks(ultimateAttacks);
+	}
 	
 
+	public void setListener(PlayerListener listener) {
+		this.listener = listener;
+	}
+	
+	
+	
+    
 
 
 }

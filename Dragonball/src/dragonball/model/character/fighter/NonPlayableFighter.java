@@ -17,4 +17,14 @@ public class NonPlayableFighter extends Fighter implements NonPlayableCharacter{
 	public boolean isStrong() {
 		return strong;
 	}
+	@Override
+	public void onAttackerTurn() {
+		setStamina(getStamina()+1);
+		
+	}
+	@Override
+	public void onDefenderTurn() {
+		// TODO Auto-generated method stub
+		
+	}
 }

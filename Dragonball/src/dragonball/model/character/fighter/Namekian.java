@@ -25,4 +25,18 @@ This line initializes this class with then 2nd Constructor of the PlayableFighte
 		super(name,1350,0,50,3,5,superAttacks,ultimateAttacks); 
 }
 
+	@Override
+	public void onAttackerTurn() {
+		setStamina(getStamina()+1);
+		setHealthPoints(getHealthPoints()+1);
+		
+	}
+
+	@Override
+	public void onDefenderTurn() {
+		setStamina(getStamina()+1);
+		setHealthPoints(getHealthPoints()+1);
+		
+	}
+
 }

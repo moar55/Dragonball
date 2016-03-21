@@ -1,9 +1,12 @@
-package dragonball.model.battle;
+	package dragonball.model.battle;
 
 public class Battle {
 	private BattleOpponent me;
 	private BattleOpponent foe;
-	private BattleOpponent currentOpponent;
+	private BattleOpponent attacker;
+	private boolean meBlocking;
+	private boolean foeBlocking;
+	
 	
 	public Battle(BattleOpponent me, BattleOpponent foe){
 		this.me=me;
@@ -25,7 +28,7 @@ public class Battle {
 	}
 
 	public BattleOpponent getCurrentOpponent() {
-		return currentOpponent;
+		return attacker;
 	}
 	
 	

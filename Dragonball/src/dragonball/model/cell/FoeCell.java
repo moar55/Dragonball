@@ -5,14 +5,14 @@ import dragonball.model.character.fighter.NonPlayableFighter;
 public class FoeCell  extends Cell{
  
 	private NonPlayableFighter foe;
-	
+	private CellListener world; 
 	public FoeCell(NonPlayableFighter foe){
 		this.foe=foe;
 	}
 	
 		@Override
 	public String toString() {
-		// TODO Auto-generated method stub
+		
 		if(foe.isStrong())
 			return "[b]";
 		
@@ -23,9 +23,23 @@ public class FoeCell  extends Cell{
 		public NonPlayableFighter getFoe() {
 			return foe;
 		}
+		
+	
+
+		public void setWorld(CellListener world) {
+			this.world = world;
+		}
+
+		@Override
+		public void onStep() {
+			if(world!=null)
+				world.onFoeEncountered(foe);
+			
+			
+		}
 
 
-
+		
 		
 	
 }

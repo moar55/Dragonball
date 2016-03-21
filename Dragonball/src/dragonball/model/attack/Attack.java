@@ -1,5 +1,7 @@
 package dragonball.model.attack;
 
+import dragonball.model.battle.BattleOpponent;
+
 abstract public class Attack {
 	private  String name;
 	 private int damage;
@@ -13,4 +15,9 @@ abstract public class Attack {
 	public int getDamage(){
 		return damage;
 	}
+	
+	abstract int getAppliedDamage(BattleOpponent attacker );
+	
+	abstract void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking);
+	
 }

@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import dragonball.model.character.fighter.NonPlayableFighter;
 import dragonball.model.cell.*;
 
-public class World {
+public class World implements CellListener {
+	
+	private WorldListener game;
 	private Cell [][] map;
 	private int playerColumn;
 	private int playerRow;
@@ -102,6 +104,42 @@ public class World {
 		}
 		return x;
 		
+	}
+	
+	public void resetPlayerPosition(){
+		playerColumn=9;
+		playerRow=9;
+	}
+	
+	public void moveUp(){
+		if(playerRow>0)
+			playerRow++;
+	}
+	
+	public void moveDown(){
+		if(playerRow<9)
+			playerRow--;
+	}
+	
+	public void moveRight(){
+		if(playerColumn<9)
+			playerColumn++;
+	}
+	
+	public void moveLeft(){
+		if(playerColumn>0)
+			playerColumn--;
+	}
+	
+	@Override
+	public void onFoeEncountered(NonPlayableFighter foe) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onCollectibleFound(Collectible collectible) {
+		// TODO Auto-generated method stub
+		game.onCollectibleFound(collectible);
 	}
 	
 

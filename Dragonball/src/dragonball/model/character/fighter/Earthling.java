@@ -24,4 +24,17 @@ public class Earthling extends PlayableFighter {
 		
 		super(name,1250,50,50,4,4,superAttacks,ultimateAttacks); 
 	}
+
+	@Override
+	public void onAttackerTurn() {
+		setStamina(getStamina()+1);
+		setKi(getKi());
+	}
+
+	@Override
+	public void onDefenderTurn() {
+		setStamina(getStamina()+1);
+		
+		
+	}
 }

@@ -36,4 +36,8 @@ public interface BattleOpponent {
 
 	public int getMaxStamina();
 	
+	public void onAttackerTurn();
+	
+	public void onDefenderTurn();
+	
 }

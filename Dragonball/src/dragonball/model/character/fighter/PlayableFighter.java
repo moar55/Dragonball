@@ -1,4 +1,4 @@
-package dragonball.model.character.fighter;
+	package dragonball.model.character.fighter;
 
 import java.util.ArrayList;
 
@@ -35,6 +35,12 @@ abstract public  class PlayableFighter extends Fighter implements PlayableCharac
 	
 	public void setXp(int xp) {
 		this.xp = xp;
+		if(xp>targetXp)
+		{
+			targetXp+=20;
+			abilityPoints+=2;
+			this.xp=0;
+		}
 	}
 	
 	public int getTargetXp() {

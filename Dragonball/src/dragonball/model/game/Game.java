@@ -14,6 +14,7 @@ import dragonball.model.character.fighter.*;
 import dragonball.model.dragon.Dragon;
 
 public class Game  {
+	private GameState state;
 	private Player player;
 	private World world;
 	private ArrayList <NonPlayableFighter> weakFoes;
@@ -256,6 +257,15 @@ public static int numOfLines(String filePath) throws IOException{
 		return dragons;
 	}
 	
+	
+	
+	public GameState getState() {
+		return state;
+	}
+
+
+
+
 	public static void main(String[] args) throws IOException {
 		Game x=new Game();
 	}

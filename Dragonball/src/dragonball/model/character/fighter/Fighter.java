@@ -68,7 +68,14 @@ abstract  public class Fighter extends Character implements BattleOpponent  {
 	}
 
 	public void setHealthPoints(int healthPoints) {
-		this.healthPoints = healthPoints;
+		if(healthPoints>=0 && healthPoints<=maxHealthPoints)
+			this.healthPoints=healthPoints;
+			
+			if(healthPoints<0)
+				this.healthPoints=0;
+			
+			else
+				this.healthPoints=maxHealthPoints;
 	}
 
 	public int getMaxHealthPoints() {
@@ -84,7 +91,14 @@ abstract  public class Fighter extends Character implements BattleOpponent  {
 	}
 
 	public void setKi(int ki) {
+		if(ki>=0 && ki<=this.maxKi)
 		this.ki = ki;
+		
+		if(ki<0)
+			this.ki=0;
+		
+		else
+			this.ki=this.maxKi;
 	}
 
 	public int getMaxKi() {
@@ -100,7 +114,14 @@ abstract  public class Fighter extends Character implements BattleOpponent  {
 	}
 
 	public void setStamina(int stamina) {
-		this.stamina = stamina;
+		if(stamina>=0 && stamina<=maxStamina)
+			this.stamina = stamina;
+			
+			if(stamina<0)
+				this.stamina=0;
+			
+			else
+				this.stamina=maxStamina;
 	}
 
 	public ArrayList<SuperAttack> getSuperAttacks() {
