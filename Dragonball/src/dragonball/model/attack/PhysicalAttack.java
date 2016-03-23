@@ -1,6 +1,7 @@
 package dragonball.model.attack;
 
 import dragonball.model.battle.BattleOpponent;
+import dragonball.model.character.fighter.Saiyan;
 
 public class PhysicalAttack extends Attack  {
 
@@ -10,14 +11,19 @@ public class PhysicalAttack extends Attack  {
 	}
 
 	@Override
-	int getAppliedDamage(BattleOpponent attacker) {
-		// TODO Auto-generated method stub
+	public int getAppliedDamage(BattleOpponent attacker) {
+	
+		int damage = 50+attacker.getPhysicalDamage();
 		
-		return 50+attacker.getPhysicalDamage();
+		if(attacker instanceof Saiyan && ((Saiyan)attacker).isTransformed())
+		return damage+ (int)(0.25*damage);
+		
+		else
+			return damage;
 	}
 
 	@Override
-	void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
+	public void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
 		super.onUse(attacker,defender,defenderBlocking);
 		attacker.setKi(attacker.getKi()+1);
 	}

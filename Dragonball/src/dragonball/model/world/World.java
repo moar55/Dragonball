@@ -133,12 +133,13 @@ public class World implements CellListener {
 	
 	@Override
 	public void onFoeEncountered(NonPlayableFighter foe) {
-		// TODO Auto-generated method stub
-		
+	   
+		map[playerColumn][playerRow]=new EmptyCell();
+	   game.onFoeEncountered(foe);
 	}
 	@Override
 	public void onCollectibleFound(Collectible collectible) {
-		// TODO Auto-generated method stub
+		
 		game.onCollectibleFound(collectible);
 	}
 	

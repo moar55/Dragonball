@@ -1,6 +1,7 @@
 package dragonball.model.attack;
 
 import dragonball.model.battle.BattleOpponent;
+import dragonball.model.character.fighter.Saiyan;
 
 public class UltimateAttack extends Attack  {
 	public UltimateAttack (String name, int damage){
@@ -8,13 +9,19 @@ public class UltimateAttack extends Attack  {
 }
 
 	@Override
-	int getAppliedDamage(BattleOpponent attacker) {
-
-		return this.getDamage()+attacker.getBlastDamage();
+	public int getAppliedDamage(BattleOpponent attacker) {
+		
+	int damage = getDamage()+attacker.getBlastDamage();
+	
+		if(attacker instanceof Saiyan && ((Saiyan)attacker).isTransformed())
+		return damage+ (int)(0.25*damage);
+		
+		else
+			return damage;
 	}
 
 	@Override
-	void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
+	public void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
 
 		if(attacker.getKi()>=3){
 			super.onUse(attacker, defender, defenderBlocking);

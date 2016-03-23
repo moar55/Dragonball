@@ -12,12 +12,12 @@ public class DragonWish extends EventObject{
 	private UltimateAttack ultimateAttack;
 	
 	
-	DragonWish(Dragon dragon, DragonWishType type){
+	public DragonWish(Dragon dragon, DragonWishType type){
 		super(dragon);
 		this.type=type;
 	}
 	
-	DragonWish(Dragon dragon, DragonWishType type, int senzuBeansOrAbilityPoints){
+	public DragonWish(Dragon dragon, DragonWishType type, int senzuBeansOrAbilityPoints){
 	this(dragon,type);
 	if(type==DragonWishType.SENZU_BEANS)
 		senzuBeans=senzuBeansOrAbilityPoints;
@@ -25,12 +25,12 @@ public class DragonWish extends EventObject{
 		abilityPoints=senzuBeansOrAbilityPoints;
 	}
 	
-	DragonWish(Dragon dragon, DragonWishType type, SuperAttack superAttack){
+	public DragonWish(Dragon dragon, DragonWishType type, SuperAttack superAttack){
 		this(dragon,type);
 		this.superAttack=superAttack;
 	}
 	
-	DragonWish(Dragon dragon, DragonWishType type, UltimateAttack ultimateAttack){
+	public DragonWish(Dragon dragon, DragonWishType type, UltimateAttack ultimateAttack){
 		this(dragon,type);
 		this.ultimateAttack=ultimateAttack;
 	}

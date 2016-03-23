@@ -9,7 +9,8 @@ public class SuperSaiyan extends UltimateAttack {
 	}
 	
 	@Override
-	void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
+	public void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
+		
 		
 		Saiyan s= (Saiyan)attacker;
 		s.setTransformed(true);

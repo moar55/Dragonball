@@ -8,7 +8,7 @@ public class MaximumCharge extends SuperAttack{
 		}
 		
 		@Override
-		void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
+		public void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
 
 			attacker.setKi(attacker.getKi()+3);
 		}
