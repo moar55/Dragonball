@@ -36,6 +36,15 @@ public class Dragon {
 		return abilityPoints;
 	}
 	
+	public DragonWish[] getWishes(){
+		DragonWish[] output= new DragonWish[4] ;
+		output[0]=new DragonWish(this,DragonWishType.SENZU_BEANS,senzuBeans);
+		output[1]=new DragonWish(this, DragonWishType.ABILITY_POINTS,abilityPoints);
+		output[2]=new DragonWish(this, DragonWishType.SUPER_ATTACK,superAttacks.get((int)(Math.random()*superAttacks.size())));
+		output[3]=new DragonWish(this, DragonWishType.ULTIMATE_ATTACK,ultimateAttacks.get((int)(Math.random()*superAttacks.size())));
+		return output;
+	}
+	
 	
 
 }

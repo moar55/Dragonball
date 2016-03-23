@@ -12,13 +12,14 @@ public class PhysicalAttack extends Attack  {
 	@Override
 	int getAppliedDamage(BattleOpponent attacker) {
 		// TODO Auto-generated method stub
-		return 0;
+		
+		return 50+attacker.getPhysicalDamage();
 	}
 
 	@Override
 	void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
-		// TODO Auto-generated method stub
-		
+		super.onUse(attacker,defender,defenderBlocking);
+		attacker.setKi(attacker.getKi()+1);
 	}
 	
 		

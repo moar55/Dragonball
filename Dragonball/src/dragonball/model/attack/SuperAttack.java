@@ -9,14 +9,18 @@ public class SuperAttack extends Attack {
 
 	@Override
 	int getAppliedDamage(BattleOpponent attacker) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return this.getDamage()+attacker.getBlastDamage();
 	}
 
 	@Override
 	void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking) {
-		// TODO Auto-generated method stub
 		
+		if(attacker.getKi()>=1){
+			super.onUse(attacker, defender, defenderBlocking);
+			attacker.setKi(attacker.getKi()-1);
+		}
+					
 	}
 
 }

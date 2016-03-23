@@ -12,6 +12,7 @@ public class BattleEvent extends EventObject {
 	private BattleOpponent winner;
 	private Attack atttack;
 	private Collectible collectible;
+	private BattleListener battlelistener;
 	
 	public BattleEvent(Battle battle, BattleEventType type){
 		super(battle);

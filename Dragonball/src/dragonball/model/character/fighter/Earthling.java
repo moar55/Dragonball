@@ -28,7 +28,7 @@ public class Earthling extends PlayableFighter {
 	@Override
 	public void onAttackerTurn() {
 		setStamina(getStamina()+1);
-		setKi(getKi());
+		setKi(getKi()+1);
 	}
 
 	@Override

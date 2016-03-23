@@ -18,6 +18,18 @@ abstract public class Attack {
 	
 	abstract int getAppliedDamage(BattleOpponent attacker );
 	
-	abstract void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking);
+	 void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking){
+		  int damage= getAppliedDamage(attacker);
+		  int remDamage=damage;
+		  
+		  if(defenderBlocking){
+			  int deductStamina=damage/100;
+			   remDamage=damage%100;
+		  }
+		  
+		  defender.setHealthPoints(defender.getHealthPoints()-remDamage);
+		  
+		  
+	 }
 	
 }
