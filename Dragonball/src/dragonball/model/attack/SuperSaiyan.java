@@ -13,6 +13,7 @@ public class SuperSaiyan extends UltimateAttack {
 		
 		
 		Saiyan s= (Saiyan)attacker;
+		if(s.getKi()>=3)
 		s.setTransformed(true);
 	
 	}

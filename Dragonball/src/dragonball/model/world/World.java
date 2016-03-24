@@ -32,7 +32,7 @@ public class World implements CellListener {
 		for(int i=0;i<10;i++)
 			for(int j=0;j<10;j++)
 				map[i][j]=new EmptyCell();
-		
+			
 		//Random strongFoe at (0,0)
 		this.map[0][0]=new FoeCell(strongFoes.get((int)((Math.random()*(strongFoes.size())))));
 			
@@ -135,13 +135,21 @@ public class World implements CellListener {
 	public void onFoeEncountered(NonPlayableFighter foe) {
 	   
 		map[playerColumn][playerRow]=new EmptyCell();
+		
+		if(game!=null)
 	   game.onFoeEncountered(foe);
 	}
 	@Override
 	public void onCollectibleFound(Collectible collectible) {
-		
+		map[playerColumn][playerRow]=new EmptyCell();
+		if(game!=null)
 		game.onCollectibleFound(collectible);
 	}
+	public void setGame(WorldListener game) {
+		this.game = game;
+	}
+	
+	
 	
 
 	

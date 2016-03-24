@@ -33,6 +33,7 @@ public class Battle {
 		foe.setStamina(foe.getMaxStamina());
 		me.setKi(0);
 		foe.setKi(0);
+		attacker=me;
 	}
 
 	public BattleOpponent getMe() {
@@ -48,7 +49,7 @@ public class Battle {
 	}
 	
 	
-	ArrayList<Attack> getAssignedAttacks(){
+	public ArrayList<Attack> getAssignedAttacks(){
 		ArrayList<Attack> output= new ArrayList<>();
 		
 		output.addAll(me.getSuperAttacks());
@@ -64,13 +65,14 @@ public class Battle {
 	
 		
 		if(attackerr.getName().equals(mee.getName()))
-		attack.onUse(attacker,foe ,foeBlocking);
+		attack.onUse(me,foe ,foeBlocking);
 		
 		else
-			attack.onUse(attacker, me, meBlocking);
+			attack.onUse(foe, me, meBlocking);
 		
 	 BattleEvent e = new BattleEvent(this,BattleEventType.ATTACK,attack);
-	 	game.onBattleEvent(e);
+	 	if(game!=null)
+	 		game.onBattleEvent(e);
 	 	endTurn();
 	 	
 	}
@@ -79,6 +81,7 @@ public class Battle {
 		
 		meBlocking=true;
 		BattleEvent e = new BattleEvent(this,BattleEventType.BLOCK);
+		if(game!=null)
 		game.onBattleEvent(e);
 		endTurn();
 	}
@@ -88,9 +91,11 @@ public class Battle {
 		if(player.getSenzuBeans()>=1)
 		{player.getActiveFighter().setHealthPoints(player.getActiveFighter().getMaxHealthPoints());
 		 player.getActiveFighter().setStamina(player.getActiveFighter().getMaxStamina());
+		 player.setSenzuBeans(player.getSenzuBeans()-1);
 		}
 		
 		BattleEvent e = new BattleEvent(this, BattleEventType.USE);
+		if(game!=null)
 		game.onBattleEvent(e);
 	}
 	
@@ -130,12 +135,85 @@ public class Battle {
 	
 	public void start (){
 		BattleEvent e = new BattleEvent(this, BattleEventType.STARTED);
-		game.onBattleEvent(e);
+		if(game!=null)game.onBattleEvent(e);
 	}
 	
-	void endTurn(){
+	public void endTurn(){
+		
+		 
+		if(foe.getHealthPoints()==0 || me.getHealthPoints()==0){
+			if(foe.getHealthPoints()==0)
+			{
+				BattleEvent e = new BattleEvent(this, BattleEventType.ENDED, me);
+				if(game!=null)
+				game.onBattleEvent(e);
+			}
+			
+			else
+			{
+				BattleEvent e = new BattleEvent(this, BattleEventType.ENDED, foe);
+				if(game!=null)
+				game.onBattleEvent(e);
+				
+			}
+		}
+		
+		else
+		{
+			Fighter attackerr = (Fighter)attacker;
+			Fighter mee=(Fighter)me;
+			Fighter foee= (Fighter)foe;
+			
+			if(attackerr.getName().equals(mee.getName()))
+			{
+				me.onAttackerTurn();
+				foe.onDefenderTurn();
+				switchTurn();
+			}
+			
+			else
+			{
+				foe.onAttackerTurn();
+				me.onDefenderTurn();
+				switchTurn();
+			}
+		}
+	}
+	
+	public void switchTurn(){
+		Fighter attackerr = (Fighter)attacker;
+		Fighter mee=(Fighter)me;
+		
+		if(attackerr.getName().equals(mee.getName()))
+			attacker=foe;
+		
+		else
+			attacker=me;
+			
 		
 	}
+
+	public void setGame(BattleListener game) {
+		this.game = game;
+	}
+
+	public BattleOpponent getAttacker() {
+		return attacker;
+	}
+
+	public boolean isMeBlocking() {
+		return meBlocking;
+	}
+
+	public boolean isFoeBlocking() {
+		return foeBlocking;
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 }
