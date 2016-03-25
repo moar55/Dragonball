@@ -15,6 +15,8 @@ public class World implements CellListener {
 	
 	public World(){
 		this.map=new Cell[10][10];
+		playerColumn=9;
+		playerRow=9;
 	}
 	public Cell[][] getMap(){
 		return map;

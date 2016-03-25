@@ -112,9 +112,10 @@ public class Battle {
 	public  void play(){
 		
 		int rand = (int)(Math.random()*2);
-		if(rand ==0)
+		if(rand ==0){
 			foeBlocking = true;
-		
+			endTurn();
+		}
 		else
 		{
 			 rand = (int)(Math.random()*3);

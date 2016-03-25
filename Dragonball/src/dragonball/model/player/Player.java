@@ -122,6 +122,19 @@ public class Player {
 	}
 	
 	public void chooseWish(DragonWish wish){
+		
+		if(wish.getType()==DragonWishType.SENZU_BEANS)
+			senzuBeans+=wish.getSenzuBeans();
+		
+		else if (wish.getType()==DragonWishType.ABILITY_POINTS)
+				activeFighter.setAbilityPoints(activeFighter.getAbilityPoints()+wish.getAbilityPoints());
+		
+		else if (wish.getType()==DragonWishType.SUPER_ATTACK)
+				superAttacks.add(wish.getSuperAttack());
+		
+		else
+				ultimateAttacks.add(wish.getUltimateAttack());
+		
 		if(game!=null)
 		game.onWishChosen(wish);
 			

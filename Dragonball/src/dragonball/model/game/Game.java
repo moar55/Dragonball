@@ -36,6 +36,8 @@ public class Game implements WorldListener , PlayerListener,BattleListener  {
 		this.loadFoes("Database-Foes_20311.csv");
 		this.loadDragons("Database-Dragons_20310.csv");
 		player= new Player("random");
+		player.setGame(this);
+		state=GameState.WORLD;
 		this.world=new World();
 		world.setGame(this);
 		world.generateMap(weakFoes, strongFoes);
@@ -302,6 +304,7 @@ public static int numOfLines(String filePath) throws IOException{
 			if(((NonPlayableFighter)e.getCurrentOpponent()).isStrong())
 			{
 				player.setExploredMaps(player.getExploredMaps()+1);
+				world=new World();
 				world.generateMap(weakFoes, strongFoes);
 			}
 			state=GameState.WORLD;
