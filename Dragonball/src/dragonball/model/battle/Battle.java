@@ -92,11 +92,13 @@ public class Battle {
 		{player.getActiveFighter().setHealthPoints(player.getActiveFighter().getMaxHealthPoints());
 		 player.getActiveFighter().setStamina(player.getActiveFighter().getMaxStamina());
 		 player.setSenzuBeans(player.getSenzuBeans()-1);
+		 BattleEvent e = new BattleEvent(this, BattleEventType.USE);
+			if(game!=null)
+			game.onBattleEvent(e);
+			endTurn();
 		}
 		
-		BattleEvent e = new BattleEvent(this, BattleEventType.USE);
-		if(game!=null)
-		game.onBattleEvent(e);
+		
 	}
 	
 	public BattleOpponent getDefender(){

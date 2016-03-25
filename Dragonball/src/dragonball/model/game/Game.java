@@ -1,6 +1,7 @@
 package dragonball.model.game;
 
 import dragonball.model.player.Player;
+import dragonball.model.player.PlayerListener;
 import dragonball.model.world.*;
 
 import java.io.BufferedReader;
@@ -10,10 +11,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import dragonball.model.attack.*;
+import dragonball.model.battle.Battle;
+import dragonball.model.battle.BattleEvent;
+import dragonball.model.battle.BattleEventType;
+import dragonball.model.battle.BattleListener;
+import dragonball.model.cell.Collectible;
 import dragonball.model.character.fighter.*;
 import dragonball.model.dragon.Dragon;
+import dragonball.model.dragon.DragonWish;
 
-public class Game  {
+public class Game implements WorldListener , PlayerListener,BattleListener  {
 	private GameState state;
 	private Player player;
 	private World world;
@@ -21,15 +28,17 @@ public class Game  {
 	private ArrayList <NonPlayableFighter> strongFoes;
 	private ArrayList <Attack> attacks;
 	private ArrayList <Dragon> dragons;
+	private GameListener gui;
+
 	
 	public Game() throws IOException{
 		this.loadAttacks("Database-Attacks_20309.csv");
 		this.loadFoes("Database-Foes_20311.csv");
 		this.loadDragons("Database-Dragons_20310.csv");
+		player= new Player("random");
 		this.world=new World();
+		world.setGame(this);
 		world.generateMap(weakFoes, strongFoes);
-		
-	
 		
 	}
 	
@@ -269,5 +278,102 @@ public static int numOfLines(String filePath) throws IOException{
 	public static void main(String[] args) throws IOException {
 		Game x=new Game();
 	}
+
+
+
+
+	@Override
+	public void onBattleEvent(BattleEvent e) {
+		if(e.getType()==BattleEventType.STARTED)
+			state=GameState.BATTLE;
+		
+		if(e.getType()==BattleEventType.ENDED){
+			if(!(((Fighter)e.getWinner()).getName().equals(((Fighter)e.getCurrentOpponent()).getName()))){
+				player.getActiveFighter().setXp(player.getActiveFighter().getXp()+ (e.getCurrentOpponent().getLevel()*5));
+				ArrayList<SuperAttack> temp =player.getSuperAttacks();
+				temp.addAll(e.getCurrentOpponent().getSuperAttacks());
+				player.setSuperAttacks(temp);
+				
+				ArrayList<UltimateAttack> temp2 =player.getUltimateAttacks();
+				temp2.addAll(e.getCurrentOpponent().getUltimateAttacks());
+				player.setUltimateAttacks(temp2);
+			}
+			
+			if(((NonPlayableFighter)e.getCurrentOpponent()).isStrong())
+			{
+				player.setExploredMaps(player.getExploredMaps()+1);
+				world.generateMap(weakFoes, strongFoes);
+			}
+			state=GameState.WORLD;
+		}
+			
+			if(gui!=null)
+			gui.onBattleEvent(e);
+		}
+			
+		
+	
+
+
+
+	@Override
+	public void onDragonCalled() {
+
+		int rand = (int)(Math.random()*dragons.size());
+		Dragon chosen= dragons.get(rand);
+		player.setDragonBalls(0);
+		state=GameState.DRAGON;
+		if(gui!=null)
+		gui.onDragonCalled(chosen);
+		
+	}
+
+
+
+
+	@Override
+	public void onWishChosen(DragonWish wish) {
+		state=GameState.WORLD;
+		
+	}
+
+
+
+
+	@Override
+	public void onFoeEncountered(NonPlayableFighter foe) {
+			Battle now = new Battle(player.getActiveFighter(), foe);
+			now.setGame(this);
+			now.start();
+			
+		
+	}
+
+
+
+
+	@Override
+	public void onCollectibleFound(Collectible collectible) {
+
+		if(collectible==Collectible.SENZU_BEAN)
+			player.setSenzuBeans(player.getSenzuBeans()+1);
+		else
+		{
+			player.setDragonBalls(player.getDragonBalls()+1);
+			if(player.getDragonBalls()==7)
+				player.callDragon();
+		}
+		
+		if(gui!=null)
+		gui.onCollectibleFound(collectible);
+	}
+
+
+
+
+	public void setGui(GameListener gui) {
+		this.gui = gui;
+	}
+	
 }
 	

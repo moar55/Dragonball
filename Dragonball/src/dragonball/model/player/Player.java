@@ -19,7 +19,7 @@ public class Player {
 	private int dragonBalls; 
 	private PlayableFighter activeFighter; //current fighter
 	private int exploredMaps; //number of maps explored
-	private  PlayerListener listener;
+	private  PlayerListener game;
 	
 	public Player(String name){
 		this.name=name;
@@ -117,12 +117,13 @@ public class Player {
 	}
 	
 	public void callDragon(){
-		if(listener!=null)
-			listener.onDragonCalled();
+		if(game!=null)
+			game.onDragonCalled();
 	}
 	
 	public void chooseWish(DragonWish wish){
-		listener.onWishChosen(wish);
+		if(game!=null)
+		game.onWishChosen(wish);
 			
 	}
 	
@@ -188,8 +189,8 @@ public class Player {
 	}
 	
 
-	public void setListener(PlayerListener listener) {
-		this.listener = listener;
+	public void setGame(PlayerListener game) {
+		this.game = game;
 	}
 	
 	

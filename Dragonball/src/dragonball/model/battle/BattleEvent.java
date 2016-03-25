@@ -8,14 +8,14 @@ import dragonball.model.cell.Collectible;
 
 public class BattleEvent extends EventObject {
 	private BattleEventType type;
-	private BattleOpponent currentOponent;
+	private BattleOpponent currentOpponent;
 	private BattleOpponent winner;
-	private Attack atttack;
+	private Attack attack;
 	private Collectible collectible;
-	private BattleListener battlelistener;
 	
 	public BattleEvent(Battle battle, BattleEventType type){
 		super(battle);
+		currentOpponent=battle.getFoe();
 		this.type=type;
 	}
 	
@@ -27,7 +27,7 @@ public class BattleEvent extends EventObject {
 	
 	 public BattleEvent(Battle battle, BattleEventType type, Attack attack){
 		this(battle,type);
-		 this.atttack=attack;
+		 this.attack=attack;
 	 }
 	 
 	 public BattleEvent(Battle battle, BattleEventType type, Collectible collectible){
@@ -39,16 +39,16 @@ public class BattleEvent extends EventObject {
 		return type;
 	}
 
-	public BattleOpponent getCurrentOponent() {
-		return currentOponent;
+	public BattleOpponent getCurrentOpponent() {
+		return currentOpponent;
 	}
 
 	public BattleOpponent getWinner() {
 		return winner;
 	}
 
-	public Attack getAtttack() {
-		return atttack;
+	public Attack getAttack() {
+		return attack;
 	}
 
 	public Collectible getCollectible() {
