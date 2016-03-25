@@ -34,6 +34,10 @@ public class Battle {
 		me.setKi(0);
 		foe.setKi(0);
 		attacker=me;
+		
+		BattleEvent e = new BattleEvent(this, BattleEventType.STARTED);
+		if(game!=null)
+		game.onBattleEvent(e);
 	}
 
 	public BattleOpponent getMe() {
@@ -44,10 +48,7 @@ public class Battle {
 		return foe;
 	}
 
-	public BattleOpponent getCurrentOpponent() {
-		return attacker;
-	}
-	
+
 	
 	public ArrayList<Attack> getAssignedAttacks(){
 		ArrayList<Attack> output= new ArrayList<>();
@@ -119,16 +120,16 @@ public class Battle {
 		else
 		{
 			 rand = (int)(Math.random()*3);
-			 if(rand==0)
+			 if(rand==0){
 				 attack(new PhysicalAttack());
-			 
+			 }
 			 else if (rand==1){
-				 ArrayList<SuperAttack> superAttacks = foe.getSuperAttacks();
+				 ArrayList<SuperAttack> superAttacks = attacker.getSuperAttacks();
 				 SuperAttack temp= superAttacks.get((int)(Math.random()*superAttacks.size()));
 				 attack(temp);
 			 }
 			else{
-				ArrayList<UltimateAttack> ultimateAttacks = foe.getUltimateAttacks();
+				ArrayList<UltimateAttack> ultimateAttacks = attacker.getUltimateAttacks();
 				 UltimateAttack temp= ultimateAttacks.get((int)(Math.random()*ultimateAttacks.size()));
 				 attack(temp);	 
 			 }
@@ -210,6 +211,12 @@ public class Battle {
 
 	public boolean isFoeBlocking() {
 		return foeBlocking;
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		
 	}
 	
 	

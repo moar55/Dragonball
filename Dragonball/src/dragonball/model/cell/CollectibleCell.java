@@ -17,6 +17,8 @@ public class CollectibleCell extends Cell  {
 		else 
 			return "[d]";
 	}
+	
+	
 
 	public Collectible getCollectible() {
 		return collectible;
@@ -30,6 +32,7 @@ public class CollectibleCell extends Cell  {
 	
 	@Override
 	public void onStep() {
+	
 		if(world!=null)
 			world.onCollectibleFound(collectible);
 		

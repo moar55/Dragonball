@@ -32,8 +32,10 @@ public class World implements CellListener {
 	strongFoes){
 		
 		for(int i=0;i<10;i++)
-			for(int j=0;j<10;j++)
+			for(int j=0;j<10;j++){
 				map[i][j]=new EmptyCell();
+				map[i][j].setWorld(this);
+			}
 			
 		//Random strongFoe at (0,0)
 		this.map[0][0]=new FoeCell(strongFoes.get((int)((Math.random()*(strongFoes.size())))));
@@ -108,29 +110,38 @@ public class World implements CellListener {
 		
 	}
 	
-	public void resetPlayerPosition(){
+		public void resetPlayerPosition(){
 		playerColumn=9;
 		playerRow=9;
 	}
 	
 	public void moveUp(){
-		if(playerRow>0)
-			playerRow++;
+		if(playerRow>0){
+			playerRow--;
+		map[playerColumn][playerRow].onStep();
+		}
 	}
 	
 	public void moveDown(){
-		if(playerRow<9)
-			playerRow--;
+		if(playerRow<9){
+			playerRow++;
+			map[playerColumn][playerRow].onStep();
+		}
+		
 	}
 	
 	public void moveRight(){
-		if(playerColumn<9)
+		if(playerColumn<9){
 			playerColumn++;
+		map[playerColumn][playerRow].onStep();
+	}
 	}
 	
 	public void moveLeft(){
-		if(playerColumn>0)
+		if(playerColumn>0){
 			playerColumn--;
+		map[playerColumn][playerRow].onStep();
+	}
 	}
 	
 	@Override
@@ -141,8 +152,11 @@ public class World implements CellListener {
 		if(game!=null)
 	   game.onFoeEncountered(foe);
 	}
+	
 	@Override
 	public void onCollectibleFound(Collectible collectible) {
+		
+		if(collectible==Collectible.DRAGON_BALL)
 		map[playerColumn][playerRow]=new EmptyCell();
 		if(game!=null)
 		game.onCollectibleFound(collectible);

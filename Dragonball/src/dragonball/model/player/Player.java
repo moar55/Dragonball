@@ -169,13 +169,15 @@ public class Player {
 		
 		ArrayList<SuperAttack>superAttacks=fighter.getSuperAttacks();
 		int j=0;
-		
+			
+			if(oldAttack!=null){
 			while(!(oldAttack.getName().equals(superAttacks.get(j).getName())) && j<superAttacks.size())
 				j++;
-		
-		if(oldAttack!=null)
+			
+			superAttacks.remove(j);
 			superAttacks.add(j, newAttack);
-		
+			}
+			
 		else if(superAttacks.size()<4)
 			superAttacks.add(newAttack);
 		

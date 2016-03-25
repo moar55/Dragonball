@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import dragonball.model.character.Character;
 
-abstract  public class Fighter extends Character implements BattleOpponent  {
+  abstract public class Fighter extends Character implements BattleOpponent  {
 	
 	private int level;
 	private int blastDamage; 
@@ -91,10 +91,11 @@ abstract  public class Fighter extends Character implements BattleOpponent  {
 	}
 
 	public void setKi(int ki) {
+		
 		if(ki>=0 && ki<=this.maxKi)
 		this.ki = ki;
 		
-		if(ki<0)
+		else if(ki<0)
 			this.ki=0;
 		
 		else
@@ -117,7 +118,7 @@ abstract  public class Fighter extends Character implements BattleOpponent  {
 		if(stamina>=0 && stamina<=maxStamina)
 			this.stamina = stamina;
 			
-			if(stamina<0)
+		else if(stamina<0)
 				this.stamina=0;
 			
 			else
@@ -146,6 +147,18 @@ abstract  public class Fighter extends Character implements BattleOpponent  {
 
 	public void setMaxStamina(int maxStamina) {
 		this.maxStamina = maxStamina;
+	}
+
+	@Override
+	public void onAttackerTurn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDefenderTurn() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

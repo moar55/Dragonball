@@ -4,6 +4,7 @@ import java.util.EventObject;
 
 import dragonball.model.attack.Attack;
 import dragonball.model.cell.Collectible;
+import dragonball.model.character.fighter.*;
 
 
 public class BattleEvent extends EventObject {
@@ -15,7 +16,7 @@ public class BattleEvent extends EventObject {
 	
 	public BattleEvent(Battle battle, BattleEventType type){
 		super(battle);
-		currentOpponent=battle.getFoe();
+		currentOpponent=battle.getAttacker();
 		this.type=type;
 	}
 	

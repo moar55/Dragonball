@@ -5,8 +5,8 @@ import dragonball.model.attack.*;
 
 public class Earthling extends PlayableFighter {
 	
-	static ArrayList<SuperAttack> superAttacks=new ArrayList<SuperAttack>();
-	static ArrayList<UltimateAttack> ultimateAttacks= new ArrayList<UltimateAttack>();
+		static ArrayList<SuperAttack> superAttacks=new ArrayList<SuperAttack>();
+		static ArrayList<UltimateAttack> ultimateAttacks= new ArrayList<UltimateAttack>();
 	
 	public Earthling(String name, int level, int xp, int targetXp, int maxHealthPoints,
 			int blastDamage, int physicalDamage, int abilityPoints, int maxKi, int maxStamina,
@@ -33,8 +33,9 @@ public class Earthling extends PlayableFighter {
 
 	@Override
 	public void onDefenderTurn() {
-		setStamina(getStamina()+1);
 		
+		setStamina(getStamina()+1);
+
 		
 	}
 }

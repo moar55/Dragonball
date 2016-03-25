@@ -286,8 +286,7 @@ public static int numOfLines(String filePath) throws IOException{
 
 	@Override
 	public void onBattleEvent(BattleEvent e) {
-		if(e.getType()==BattleEventType.STARTED)
-			state=GameState.BATTLE;
+		
 		
 		if(e.getType()==BattleEventType.ENDED){
 			if(!(((Fighter)e.getWinner()).getName().equals(((Fighter)e.getCurrentOpponent()).getName()))){
@@ -348,6 +347,9 @@ public static int numOfLines(String filePath) throws IOException{
 			Battle now = new Battle(player.getActiveFighter(), foe);
 			now.setGame(this);
 			now.start();
+			state=GameState.BATTLE;
+			
+			
 			
 		
 	}
@@ -360,9 +362,11 @@ public static int numOfLines(String filePath) throws IOException{
 
 		if(collectible==Collectible.SENZU_BEAN)
 			player.setSenzuBeans(player.getSenzuBeans()+1);
+		
 		else
 		{
 			player.setDragonBalls(player.getDragonBalls()+1);
+			
 			if(player.getDragonBalls()==7)
 				player.callDragon();
 		}
