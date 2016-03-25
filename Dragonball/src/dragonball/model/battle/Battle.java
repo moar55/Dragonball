@@ -51,7 +51,7 @@ public class Battle {
 	
 	public ArrayList<Attack> getAssignedAttacks(){
 		ArrayList<Attack> output= new ArrayList<>();
-		
+		output.add(new PhysicalAttack());
 		output.addAll(me.getSuperAttacks());
 		output.addAll(me.getUltimateAttacks());
 		
