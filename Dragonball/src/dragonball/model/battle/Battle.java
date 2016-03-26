@@ -64,23 +64,31 @@ public class Battle {
 		Fighter attackerr = (Fighter)attacker;
 		Fighter mee=(Fighter)me;
 	
-		
-		if(attackerr.getName().equals(mee.getName()))
+		if(attackerr.getName().equals(mee.getName())){
 		attack.onUse(me,foe ,foeBlocking);
-		
-		else
+		foeBlocking=false;
+	}
+		else{
 			attack.onUse(foe, me, meBlocking);
+			meBlocking=false;
+		}
 		
 	 BattleEvent e = new BattleEvent(this,BattleEventType.ATTACK,attack);
 	 	if(game!=null)
 	 		game.onBattleEvent(e);
 	 	endTurn();
-	 	
+	     	
 	}
 	
 	public void block(){
+		Fighter attackerr = (Fighter)attacker;
+		Fighter mee=(Fighter)me;
 		
-		meBlocking=true;
+		if(attackerr.getName().equals(mee.getName()))
+			meBlocking=true;
+		else
+			foeBlocking=true;
+		
 		BattleEvent e = new BattleEvent(this,BattleEventType.BLOCK);
 		if(game!=null)
 		game.onBattleEvent(e);

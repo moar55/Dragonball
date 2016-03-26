@@ -71,7 +71,7 @@ import dragonball.model.character.Character;
 		if(healthPoints>=0 && healthPoints<=maxHealthPoints)
 			this.healthPoints=healthPoints;
 			
-			if(healthPoints<0)
+		else if(healthPoints<0)
 				this.healthPoints=0;
 			
 			else

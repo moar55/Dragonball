@@ -1459,7 +1459,6 @@ public class M2PublicTests {
 		Field ff = w.getClass().getDeclaredField("playerColumn");
 		ff.setAccessible(true);
 		ff.set(w, 0);
-
 		ff = w.getClass().getDeclaredField("playerRow");
 		ff.setAccessible(true);
 		ff.set(w, 1);

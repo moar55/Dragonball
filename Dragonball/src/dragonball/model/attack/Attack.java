@@ -19,13 +19,18 @@ abstract public class Attack {
 	abstract public int getAppliedDamage(BattleOpponent attacker );
 	
 	 public void onUse(BattleOpponent attacker, BattleOpponent defender, boolean defenderBlocking){
-		  int damage= getAppliedDamage(attacker);
-		  int remDamage=damage;
+		  int remDamage= getAppliedDamage(attacker);
+		  
 		  
 		  if(defenderBlocking){
-			  int deductStamina=damage/100;
-			   remDamage=damage%100;
+			  int deductStamina=0;
+			  for(int i=defender.getStamina();i>0 && remDamage>0 ;i--,remDamage-=100,deductStamina++){
+			  ;
+			  }
+			  
+			  if(remDamage<0)remDamage=0;			  
 			   defender.setStamina(defender.getStamina()-deductStamina);
+			   
 		  }
 		  
 		  defender.setHealthPoints(defender.getHealthPoints()-remDamage);

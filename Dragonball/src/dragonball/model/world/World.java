@@ -3,6 +3,7 @@ package dragonball.model.world;
 import java.util.ArrayList;
 
 import dragonball.model.character.fighter.NonPlayableFighter;
+import dragonball.model.battle.Battle;
 import dragonball.model.cell.*;
 
 public class World implements CellListener {
@@ -118,14 +119,14 @@ public class World implements CellListener {
 	public void moveUp(){
 		if(playerRow>0){
 			playerRow--;
-		map[playerColumn][playerRow].onStep();
+		map[playerRow][playerColumn].onStep();
 		}
 	}
 	
 	public void moveDown(){
 		if(playerRow<9){
 			playerRow++;
-			map[playerColumn][playerRow].onStep();
+			map[playerRow][playerColumn].onStep();
 		}
 		
 	}
@@ -133,37 +134,39 @@ public class World implements CellListener {
 	public void moveRight(){
 		if(playerColumn<9){
 			playerColumn++;
-		map[playerColumn][playerRow].onStep();
+		map[playerRow][playerColumn].onStep();
 	}
 	}
 	
 	public void moveLeft(){
 		if(playerColumn>0){
 			playerColumn--;
-		map[playerColumn][playerRow].onStep();
+		map[playerRow][playerColumn].onStep();
 	}
 	}
 	
 	@Override
 	public void onFoeEncountered(NonPlayableFighter foe) {
-	   
-		map[playerColumn][playerRow]=new EmptyCell();
 		
+		map[playerColumn][playerRow]=new EmptyCell();
 		if(game!=null)
 	   game.onFoeEncountered(foe);
+		
+		
 	}
 	
 	@Override
 	public void onCollectibleFound(Collectible collectible) {
 		
-		if(collectible==Collectible.DRAGON_BALL)
-		map[playerColumn][playerRow]=new EmptyCell();
+		map[playerRow][playerColumn]=new EmptyCell();
+		
 		if(game!=null)
 		game.onCollectibleFound(collectible);
 	}
 	public void setGame(WorldListener game) {
 		this.game = game;
 	}
+	
 	
 	
 	

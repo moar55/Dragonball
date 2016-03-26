@@ -15,7 +15,9 @@ import dragonball.model.battle.Battle;
 import dragonball.model.battle.BattleEvent;
 import dragonball.model.battle.BattleEventType;
 import dragonball.model.battle.BattleListener;
+import dragonball.model.cell.Cell;
 import dragonball.model.cell.Collectible;
+import dragonball.model.cell.EmptyCell;
 import dragonball.model.character.fighter.*;
 import dragonball.model.dragon.Dragon;
 import dragonball.model.dragon.DragonWish;
@@ -279,6 +281,7 @@ public static int numOfLines(String filePath) throws IOException{
 
 	public static void main(String[] args) throws IOException {
 		Game x=new Game();
+		
 	}
 
 
@@ -305,6 +308,7 @@ public static int numOfLines(String filePath) throws IOException{
 				player.setExploredMaps(player.getExploredMaps()+1);
 				world=new World();
 				world.generateMap(weakFoes, strongFoes);
+				world.setGame(this);
 			}
 			state=GameState.WORLD;
 		}
@@ -346,12 +350,9 @@ public static int numOfLines(String filePath) throws IOException{
 	public void onFoeEncountered(NonPlayableFighter foe) {
 			Battle now = new Battle(player.getActiveFighter(), foe);
 			now.setGame(this);
-			now.start();
 			state=GameState.BATTLE;
+			now.start();
 			
-			
-			
-		
 	}
 
 
@@ -360,8 +361,11 @@ public static int numOfLines(String filePath) throws IOException{
 	@Override
 	public void onCollectibleFound(Collectible collectible) {
 
-		if(collectible==Collectible.SENZU_BEAN)
+		
+		if(collectible==Collectible.SENZU_BEAN){
+			
 			player.setSenzuBeans(player.getSenzuBeans()+1);
+		}
 		
 		else
 		{
@@ -370,6 +374,7 @@ public static int numOfLines(String filePath) throws IOException{
 			if(player.getDragonBalls()==7)
 				player.callDragon();
 		}
+		
 		
 		if(gui!=null)
 		gui.onCollectibleFound(collectible);
