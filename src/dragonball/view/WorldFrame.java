@@ -12,17 +12,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
-<<<<<<< HEAD
 import com.sun.javafx.tk.Toolkit;
 
 import dragonball.controller.GGEvent;
-=======
 
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
 import dragonball.controller.GameGUI;
 
 
-public class WorldFrame extends JFrame implements ActionListener{
+public class WorldFrame extends JFrame {
    
 	private GameGUI controller;
 	private Map map;
@@ -30,24 +27,21 @@ public class WorldFrame extends JFrame implements ActionListener{
 	private CreatingPlayer cp;
 	private JLayeredPane combo ;
 	private String currentButton;
-<<<<<<< HEAD
+
 	private CreatingPlayer creatingPlayer;
-=======
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
+
 	
 	public WorldFrame() throws IOException {
 			
-//		setPreferredSize(new Dimension(1280, 720));
-<<<<<<< HEAD
-		
+
 		setLayout(new BorderLayout());
 		combo = new JLayeredPane();		
 		combo.setBounds(0,0,1280,720);
-=======
+
 		setLayout(new BorderLayout());
 		combo = new JLayeredPane();		
 		combo.setBounds(0,0,600,400);
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
+
 		add(combo); 
 		
 		map =new Map();
@@ -55,53 +49,32 @@ public class WorldFrame extends JFrame implements ActionListener{
 		menu = new MenuScreen();
 		menu.setWorld(this);
 		menu.setBounds(400,150,400,400);
-<<<<<<< HEAD
+
 		combo.add(map, 0,0);
 		combo.add(menu, 1,0);
 
 		creatingPlayer = new CreatingPlayer();
 		creatingPlayer.setBounds(400,150,400,400);
 		creatingPlayer.setWorld(this);
-=======
-		menu.initializeButton();
-		combo.add(map, 0,0);
-		combo.add(menu, 1,0);
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
-//		cp = new CreatingPlayer();
-//		cp.setBounds(200,100,200,200);
-//		cp.setVisible(true);
-//		cp.setWorld(this);
-//		cp.initializeButton();
-//		cp.setOpaque(true);
-//		combo.add(cp);
+
 		setTitle("World Mode");
-<<<<<<< HEAD
-=======
-		menu.initializeButton();
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
 		add(combo);
-		//combo.setVisible(true);
-//		menu.setOpaque(true);
-		//menu.setVisible(false);
-		//setSize(600, 400);
-		repaint();
 		validate();
 		setVisible(true);
 		
-		//.setVisible(false);
 		setSize(1280, 720);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 	}
 	
-<<<<<<< HEAD
+
 	
 	
 	
 	public void addCreatingPlayer(){
 		combo.add(creatingPlayer,2,0);
 	}
-=======
+	
 	public void createPlayer () {
 		
 	}
@@ -109,7 +82,6 @@ public class WorldFrame extends JFrame implements ActionListener{
 	
 	
 	
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
 	
 	
 	
@@ -128,15 +100,14 @@ public class WorldFrame extends JFrame implements ActionListener{
 	public JLayeredPane getCombo() {
 		return combo;
 	}
-<<<<<<< HEAD
+
 	
 	
 //	public  String createPlayer() {
 //		combo.add(creatingPlayer, 2,0);
 //		creatingPlayer
 //	}
-=======
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
+
 
 
 
@@ -169,23 +140,13 @@ public class WorldFrame extends JFrame implements ActionListener{
 	}
 
 
-<<<<<<< HEAD
-	public void onEvent(GGEvent e) {
-		controller.onEvent(e);
-=======
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() instanceof JButton ){
-			System.out.println("HI");
-			String input= ((JButton)e.getSource()).getText();
-			if(input.equals("Ok"));
-			controller.menuEvent(input);
-		}
-		
-		
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
+	public void onEvent(GGEvent e) {
+			controller.onEvent(e);
 	}
+
+	
+
 	
 
 
@@ -206,7 +167,6 @@ public class WorldFrame extends JFrame implements ActionListener{
 	public void setController(GameGUI controller) {
 		this.controller = controller;
 	}
-<<<<<<< HEAD
 
 
 
@@ -216,11 +176,8 @@ public class WorldFrame extends JFrame implements ActionListener{
 
 
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+
+
 
 
 
@@ -231,8 +188,7 @@ public class WorldFrame extends JFrame implements ActionListener{
 	
 	
 	
-=======
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
+
 	
 }
 	

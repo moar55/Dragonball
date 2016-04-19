@@ -1,14 +1,23 @@
 package dragonball.controller;
 
 
+import java.awt.GridLayout;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import dragonball.model.character.fighter.Earthling;
+import dragonball.model.character.fighter.Fighter;
+import dragonball.model.character.fighter.Frieza;
+import dragonball.model.character.fighter.Majin;
+import dragonball.model.character.fighter.Namekian;
 import dragonball.model.character.fighter.PlayableFighter;
+import dragonball.model.character.fighter.Saiyan;
 import dragonball.model.game.Game;
 import dragonball.view.CreatingPlayer;
 import dragonball.view.MenuScreen;
@@ -47,14 +56,14 @@ public class GameGUI {
 			System.out.println(worldGUI.getCreatingPlayer().getPlayerName());
 			switch(e.getNameOfEvent()){
 			
-			case "OK" : if(!worldGUI.getCreatingPlayer().getJtextPlayerName().equals("Please enter your player's name: \n")){
+			case "OK" : if(!worldGUI.getCreatingPlayer().getJtextPlayerName().equals("Please enter your player's name: \n")){ 
 							
 				//Supposedly the user has entered a name and the game should start!
 							worldGUI.getCombo().remove(worldGUI.getCreatingPlayer());
 							worldGUI.getCombo().remove(worldGUI.getMenu());
 							worldGUI.repaint();
 							worldGUI.validate(); 
-							worldGUI.addCreatingFighter(gameEngine.getPlayer().getActiveFighter());
+							//worldGUI.addCreatingFighter(gameEngine.getPlayer().getActiveFighter());
 							JOptionPane.showMessageDialog(worldGUI, "You need to create a fighter to start playing " );
 
 							}
@@ -78,13 +87,39 @@ public class GameGUI {
 		
 		else
 		{
-			
-			//To Be continued Insha'Allah
-		for (PlayableFighter fighter : fighters) {
-			JPanel temp = new JPanel();
-			
+				for (PlayableFighter fighter : fighters) {
+					JPanel temp = new JPanel();
+					temp.setLayout(new GridLayout(0, 4));
+					JLabel temp2 = new JLabel();
+					temp2.setLayout(new GridLayout(2, 0));
+					JLabel name = new JLabel("Name: " + fighter.getName());
+					JLabel race = new JLabel("Race: " + getRace(fighter));
+					temp2.add(name);
+					temp2.add(race);
+					temp.add(temp2);
+					temp.add(getPic(getRace(fighter)));
 		}
 		}
 	}
-}
+	
+	public String getRace (PlayableFighter fighter) {
+		
+		if(fighter instanceof Earthling ) return "Earthling";
+		 if(fighter instanceof Frieza)  return "Frieza" ; 
+		if( fighter instanceof Majin)  return "Majinn";
+		if(fighter instanceof Namekian) return "Namekian" ;
+		if(fighter instanceof Saiyan) return "Saiyan" ; 
+		 return null;
+		}
+	
+	public JLabel getPic (String st){
+		switch(st){
+		case "Earthling": return new JLabel(new ImageIcon("Earthling.jpg"));
+		case "Saiyan" : return new JLabel(new ImageIcon("Goku.png"));
+		
+		}
+	}
+	
+	}
+	
 				

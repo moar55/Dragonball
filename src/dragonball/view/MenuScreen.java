@@ -5,11 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
-<<<<<<< HEAD
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-=======
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
 import java.io.File;
 import java.io.IOException;
 
@@ -20,13 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-<<<<<<< HEAD
 import dragonball.controller.GGEvent;
 
 public class MenuScreen extends JPanel  implements ActionListener{ 
-=======
-public class MenuScreen extends JPanel { 
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
+
 	
 	private JButton newGame; 
 	private JButton save;
@@ -42,7 +36,6 @@ public class MenuScreen extends JPanel {
 		  
 		  newGame= new JButton("New Game");
 		  add(newGame);
-<<<<<<< HEAD
 		  newGame.addActionListener(this);
 		 save = new JButton("Save");
 		 save.addActionListener(this);
@@ -52,13 +45,6 @@ public class MenuScreen extends JPanel {
 		  add(load);
 		  exit = new JButton("Exit");
 		  exit.addActionListener(this);
-=======
-		 save = new JButton("Save");
-		 add(save);
-		  load = new JButton("Load");
-		  add(load);
-		  exit = new JButton("Exit");
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
 		 add(exit);
 //		  JLabel order = new JLabel("Please enter your player's name");
 	//	  JTextArea  playerName =new  JTextArea();
@@ -74,18 +60,8 @@ public class MenuScreen extends JPanel {
 	
 	
 	
-<<<<<<< HEAD
 	
-=======
-	public void initializeButton(){
-		 newGame.addActionListener(world);
-		 save.addActionListener(world);
-		  load.addActionListener(world);
-		  exit.addActionListener(world);
 
-
-	}
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
 	
 	public static void main(String[] args) {
 		MenuScreen menu = new MenuScreen();
@@ -106,7 +82,6 @@ public class MenuScreen extends JPanel {
 	public void setWorld(WorldFrame world) {
 		this.world = world;
 	}
-<<<<<<< HEAD
 
 
 
@@ -117,8 +92,6 @@ public class MenuScreen extends JPanel {
 		world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText()));
 		
 	}
-=======
->>>>>>> c3eb60443824c30816bce8b83446f260ca2d3881
 	
 	
 }
