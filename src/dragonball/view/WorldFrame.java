@@ -2,18 +2,22 @@ package dragonball.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.IOException;
+import java.awt.Window;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
-import com.sun.javafx.tk.Toolkit;
+import java.awt.Rectangle;
 
+import java.awt.Toolkit;
 import dragonball.controller.GGEvent;
 
 import dragonball.controller.GameGUI;
@@ -29,35 +33,56 @@ public class WorldFrame extends JFrame {
 	private String currentButton;
 
 	private CreatingPlayer creatingPlayer;
+	private FightersList fightersList;
+	private CreatingFighter creatingFighter;
+	private ChoooseRace choooseRace;
+	
 
 	
 	public WorldFrame() throws IOException {
 			
-
+		
+		
+		combo = new JLayeredPane();		
+		//combo.setBounds(0,0,1280,720);
+		Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
+	//	Rectangle windowSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		
+		int width  = (int)(Math.round(sizeofScreen.getWidth()));
+		int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
 		setLayout(new BorderLayout());
 		combo = new JLayeredPane();		
-		combo.setBounds(0,0,1280,720);
-
-		setLayout(new BorderLayout());
-		combo = new JLayeredPane();		
-		combo.setBounds(0,0,600,400);
+		//combo.setBounds(0,0,width,height);
 
 		add(combo); 
 		
 		map =new Map();
-		map.setBounds(0,0,1280,720);
+		map.setBounds(0,0,width,height);
 		menu = new MenuScreen();
 		menu.setWorld(this);
-		menu.setBounds(400,150,400,400);
+		menu.setBounds(440,150,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
 
 		combo.add(map, 0,0);
 		combo.add(menu, 1,0);
 
 		creatingPlayer = new CreatingPlayer();
-		creatingPlayer.setBounds(400,150,400,400);
+		creatingPlayer.setBounds(440,150,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
 		creatingPlayer.setWorld(this);
+		
+		fightersList = new FightersList();
+		fightersList.setBounds(0,0,width,height);
+		fightersList.setWorld(this);
 
-		setTitle("World Mode");
+		
+		creatingFighter = new CreatingFighter();
+		creatingFighter.setBounds(440,150,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
+		creatingFighter.setWorld(this);
+		
+		choooseRace = new ChoooseRace();
+		choooseRace.setBounds(0,0,width,height);
+		choooseRace.setWorld(this);
+
+		setTitle("DragonBall");
 		add(combo);
 		validate();
 		setVisible(true);
@@ -73,6 +98,17 @@ public class WorldFrame extends JFrame {
 	
 	public void addCreatingPlayer(){
 		combo.add(creatingPlayer,2,0);
+	}
+	
+	
+	public void addFightersList(){
+		combo.add(fightersList,1,0);
+	}
+	
+	
+	
+	public void addChooseRace(){
+		combo.add(choooseRace, 3);
 	}
 	
 	public void createPlayer () {
@@ -107,13 +143,6 @@ public class WorldFrame extends JFrame {
 //		combo.add(creatingPlayer, 2,0);
 //		creatingPlayer
 //	}
-
-
-
-
-
-
-
 
 
 	public static void main(String[] args) throws IOException {
@@ -185,13 +214,32 @@ public class WorldFrame extends JFrame {
 	public CreatingPlayer getCreatingPlayer() {
 		return creatingPlayer;
 	}
-	
-	
-	
 
+
+
+
+
+	public CreatingFighter getCreatingFighter() {
+		return creatingFighter;
+	}
+
+
+
+
+
+	public FightersList getFightersList() {
+		return fightersList;
+	}
+
+
+
+
+
+	public ChoooseRace getChoooseRace() {
+		return choooseRace;
+	}
+	
+	
 	
 }
 	
-
-		 
-	 

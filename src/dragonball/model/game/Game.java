@@ -446,6 +446,10 @@ public class Game implements PlayerListener,WorldListener,BattleListener ,java.i
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
+
+	public String getSavePath() {
+		return savePath;
+	}
 	
 	
 	

@@ -20,7 +20,6 @@ public class CreatingPlayer extends JPanel implements ActionListener {
 	private JButton cancel;
 	private JTextArea playerName; 
 	private WorldFrame world;
-	
 	public CreatingPlayer() {
 		setLayout(new GridLayout(3,1));
 		  JLabel order = new JLabel("New Player");

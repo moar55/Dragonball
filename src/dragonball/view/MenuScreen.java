@@ -59,10 +59,6 @@ public class MenuScreen extends JPanel  implements ActionListener{
 		  	}
 	
 	
-	
-	
-
-	
 	public static void main(String[] args) {
 		MenuScreen menu = new MenuScreen();
 		JFrame jf = new JFrame();
