@@ -100,15 +100,20 @@ public class WorldFrame extends JFrame {
 		combo.add(creatingPlayer,2,0);
 	}
 	
+	public void addCreatingFighter(){
+		combo.add(creatingFighter,2,0);
+	}
+	
 	
 	public void addFightersList(){
+		
 		combo.add(fightersList,1,0);
 	}
 	
 	
 	
 	public void addChooseRace(){
-		combo.add(choooseRace, 3);
+		combo.add(choooseRace, 3,0);
 	}
 	
 	public void createPlayer () {
@@ -172,6 +177,7 @@ public class WorldFrame extends JFrame {
 
 	public void onEvent(GGEvent e) {
 			controller.onEvent(e);
+
 	}
 
 	

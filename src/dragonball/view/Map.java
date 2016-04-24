@@ -1,8 +1,6 @@
 package dragonball.view;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
@@ -14,11 +12,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.border.BevelBorder;
 
 public class Map extends JPanel {
 
+	/**
+	 * The actual map where you move around 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Image currentFighter ;
 	private Image boss;
 
@@ -26,6 +27,8 @@ public class Map extends JPanel {
 		// img=ImageIO.read(new File("Grass.jpg"))
 //		this.add(j);
 //		this.setPreferredSize(new Dimension(800,600));
+		
+		
 		setLayout(new GridLayout(10, 10));
 		
 		JLabel tiles [] = new JLabel[100];
@@ -35,7 +38,14 @@ public class Map extends JPanel {
 			tiles[i].setIcon(new ImageIcon("Grass.jpg"));
 			add(tiles[i]);
 		}
+		currentFighter= ImageIO.read(new File("goku_sprite.png"));
 	}
+//	 @Override
+//	protected void paintComponent(Graphics g) {
+//		super.paintComponent(g);
+//		g.drawImage(ImageIO.read(new File("Grass.jpg")), 20, 20, null)
+//		g.drawImage(currentFighter, 20, 20, null);
+//	}
 
 	public Image getCurrentFighter() {
 		return currentFighter;

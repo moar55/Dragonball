@@ -20,6 +20,7 @@ import javax.swing.border.Border;
 
 import com.sun.corba.se.spi.orbutil.fsm.Action;
 
+import dragonball.controller.GGEvent;
 import dragonball.controller.GameGUI;
 import dragonball.model.world.World;
 
@@ -29,7 +30,7 @@ public class FightersList extends JPanel implements ActionListener{
 	private WorldFrame world;
 	private ArrayList<JButton> select;
 	private ArrayList<JButton> upgrade;
-	
+	private JPanel list ;
 	public FightersList() {
 		
 		setLayout(new GridLayout(0, 1));
@@ -38,21 +39,46 @@ public class FightersList extends JPanel implements ActionListener{
 		title.setHorizontalAlignment((int) CENTER_ALIGNMENT);
 		add(title);
 		select = new ArrayList<JButton>();
+
 		upgrade = new ArrayList<JButton>();
 		
 		
 	}
 	
 	public void populate(ArrayList<JPanel> fightersPanels) {
+		
 		for(JPanel panel : fightersPanels){
 			panel.setBorder(BorderFactory.createBevelBorder(50));
 			add(panel);
 		}
 		
-		add(new JButton("Create a Fighter"));
-		add (new JButton("Back to game"));
+		
+		
+		JButton createFighter = new JButton("Create a Fighter");
+		JButton back = new JButton("Back to game");
+		createFighter.addActionListener(this);
+		back.addActionListener(this);
+		JPanel last = new JPanel();
+		last.setLayout(new GridLayout(1, 2));
+		last.add(createFighter);
+		last.add (back);
+		add(last);
 		validate();
 		repaint();
+	}
+	
+	public void addFighter (JPanel fighter){
+		remove(getComponentCount()-1);
+		add(fighter);
+		JButton createFighter = new JButton("Create a Fighter");
+		JButton back = new JButton("Back to game");
+		createFighter.addActionListener(this);
+		back.addActionListener(this);
+		JPanel last = new JPanel();
+		last.setLayout(new GridLayout(1, 2));
+		last.add(createFighter);
+		last.add (back);
+		add(last);
 	}
 
 
@@ -87,10 +113,30 @@ public class FightersList extends JPanel implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("HI");
+		
+		if(((JButton)e.getSource()).getText().equals("Select"))
+		world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText(),findIndex((JButton)e.getSource(),select)));
+		
+		else if(((JButton)e.getSource()).getText().equals("Upgrde"))
+			world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText(),findIndex((JButton)e.getSource(),upgrade)));
+		
+		else
+			world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText()));
+			
+	}	
+	
+	public static int findIndex (JButton x , ArrayList <JButton> arrayList) {
+		for(int i = 0 ;i<arrayList.size();i++ ){
+			if(x==arrayList.get(i)){
+				System.out.println(i);
+				return i ;
+			}
+		}
+		return -1;
 	}
-
+	
 	public ArrayList<JButton> getSelect() {
 		return select;
 	}
