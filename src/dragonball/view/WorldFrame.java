@@ -19,7 +19,6 @@ import java.awt.Rectangle;
 
 import java.awt.Toolkit;
 import dragonball.controller.GGEvent;
-
 import dragonball.controller.GameGUI;
 
 
@@ -42,7 +41,6 @@ public class WorldFrame extends JFrame {
 	public WorldFrame() throws IOException {
 			
 		
-		
 		combo = new JLayeredPane();		
 		//combo.setBounds(0,0,1280,720);
 		Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -60,13 +58,13 @@ public class WorldFrame extends JFrame {
 		map.setBounds(0,0,width,height);
 		menu = new MenuScreen();
 		menu.setWorld(this);
-		menu.setBounds(440,150,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
+		menu.setBounds(width/3,height/4,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
 
 		combo.add(map, 0,0);
 		combo.add(menu, 1,0);
 
 		creatingPlayer = new CreatingPlayer();
-		creatingPlayer.setBounds(440,150,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
+		creatingPlayer.setBounds(width/(width/440),height/(height/150),(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
 		creatingPlayer.setWorld(this);
 		
 		fightersList = new FightersList();
@@ -75,7 +73,7 @@ public class WorldFrame extends JFrame {
 
 		
 		creatingFighter = new CreatingFighter();
-		creatingFighter.setBounds(440,150,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
+		creatingFighter.setBounds(width/(width/440),height/(height/150),(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
 		creatingFighter.setWorld(this);
 		
 		choooseRace = new ChoooseRace();
@@ -87,7 +85,8 @@ public class WorldFrame extends JFrame {
 		validate();
 		setVisible(true);
 		
-		setSize(1280, 720);
+		setSize(width, height);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 	}
@@ -202,20 +201,6 @@ public class WorldFrame extends JFrame {
 	public void setController(GameGUI controller) {
 		this.controller = controller;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	public CreatingPlayer getCreatingPlayer() {
 		return creatingPlayer;

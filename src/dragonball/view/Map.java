@@ -22,7 +22,8 @@ public class Map extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Image currentFighter ;
 	private Image boss;
-
+	private int playerColumn=9;
+	private int playerRow=9;
 	public Map() throws IOException {
 		// img=ImageIO.read(new File("Grass.jpg"))
 //		this.add(j);
@@ -30,15 +31,20 @@ public class Map extends JPanel {
 		
 		
 		setLayout(new GridLayout(10, 10));
-		
-		JLabel tiles [] = new JLabel[100];
-		for (int i = 0; i < 100; i++) {
-			tiles[i]= new JLabel();
-			tiles[i].setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.black, Color.white));
-			tiles[i].setIcon(new ImageIcon("Grass.jpg"));
-			add(tiles[i]);
+		JLabel tiles [][] = new JLabel[10][10];
+		for (int i = 0; i < 10; i++) 
+			for(int j =0 ;j<10 ; j++){
+			if(i*j==(playerColumn*playerRow))
+				add(new JLabel(new ImageIcon("Pics\\goku_sprite.png")));
+			
+			else{
+			tiles[i][j]= new JLabel();
+			tiles[i][j].setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.black, Color.white));
+			tiles[i][j].setIcon(new ImageIcon("Pics\\Grass.jpg"));
+			add(tiles[i][j]);
+			}
 		}
-		currentFighter= ImageIO.read(new File("goku_sprite.png"));
+		
 	}
 //	 @Override
 //	protected void paintComponent(Graphics g) {

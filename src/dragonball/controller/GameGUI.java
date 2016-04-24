@@ -2,6 +2,7 @@ package dragonball.controller;
 
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -49,6 +50,8 @@ public class GameGUI implements KeyListener {
 		
 		gameEngine= new Game();
 		Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
+		int width  = (int)(Math.round(sizeofScreen.getWidth()));
+		int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
 		 introScreen = new JFrame("Intro");
 		 BufferedImage pic = ImageIO.read(new File("IntroScreen.png"));
 //		 BufferedReader dbi = new BufferedImage(dWidth, dHeight, imageType);
@@ -56,16 +59,29 @@ public class GameGUI implements KeyListener {
 //	        AffineTransform at = AffineTransform.getScaleInstance(fWidth, fHeight);
 //	        g.drawRenderedImage(sbi, at);
 		pic.getScaledInstance(sizeofScreen.width, sizeofScreen.height-(int)Math.round(sizeofScreen.getHeight()/14.4), BufferedImage.TYPE_INT_ARGB);
-		introScreen.setContentPane(new JLabel(new ImageIcon(pic)));
+	//	introScreen.setContentPane(new JLabel(new ImageIcon(pic)));
+		
 		JFXPanel jp = new JFXPanel();
 		player = new MediaPlayer(new Media(Paths.get("IntroMusic.mp3").toUri().toString()));
-		player.play();
+		player.play();	
 		
 		introScreen.addKeyListener(this);
 		introScreen.setVisible(true);
-		introScreen.setSize(1280, 720);
+		introScreen.setSize(width, height);
+		introScreen.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		
+		BufferedImage resizedImage = new BufferedImage(width, height, 	BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(pic, 0, 0, width, height, null);
+		g.dispose();		
+		introScreen.setContentPane(new JLabel(new ImageIcon(resizedImage)));
 		introScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		
+		for(PlayableFighter fighter :gameEngine.getPlayer().getFighters())
+			worldGUI.getFightersList().addFighter(getFighterPanel(fighter));
+			
+			
 		worldGUI = new WorldFrame();
 		worldGUI.setVisible(false);
 		worldGUI.setController(this);
@@ -122,7 +138,6 @@ public class GameGUI implements KeyListener {
 							worldGUI.repaint();
 							worldGUI.validate(); 
 							worldGUI.addFightersList();
-							worldGUI.getFightersList().populate(getFighterPanels());
 							JOptionPane.showMessageDialog(worldGUI, "You need to create a fighter to start playing ");
 							 		
 
@@ -139,10 +154,12 @@ public class GameGUI implements KeyListener {
 		}
 		
 		public void onFightersList(GGEvent e) {
-			System.out.println(e.getNameOfEvent());
+		//	System.out.println(e.getNameOfEvent());
 			
 			switch (e.getNameOfEvent()){
 			case "Select" : 
+							System.out.println(e.getIndex());
+							System.out.println(worldGUI.getFightersList().getSelect().size());
 							gameEngine.getPlayer().setActiveFighter(gameEngine.getPlayer().getFighters().get(e.getIndex()));
 							break;
 			
@@ -153,13 +170,93 @@ public class GameGUI implements KeyListener {
 							
 			case "Create a Fighter" : worldGUI.addCreatingFighter();break;	
 			
-			case "Back to game"  : System.out.println("lol");worldGUI.getCombo().remove(worldGUI.getFightersList());
+			case "Back to game"  : System.out.println("lol");worldGUI.getCombo().remove(worldGUI.getFightersList());break;
+			
+			
+			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>Health</center></html>": 
+				
+				
+				PlayableFighter fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				if(fighter.getAbilityPoints()>=1){
+				fighter.setMaxHealthPoints(fighter.getMaxHealthPoints()+50);
+				refreshFightersList();}
+				
+				else 
+					JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+				break;
+			
+			case "<html><center>"+"Upgrade"+"<br>"+"Physical"+"<br>Damage</center></html>": 
+				 fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				if(fighter.getAbilityPoints()>=1){
+				fighter.setPhysicalDamage(fighter.getPhysicalDamage()+50);
+				refreshFightersList();
+				}
+				else
+					JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+				break;
+			
+				
+			case "<html><center>"+"Upgrade"+"<br>"+"Blast"+"<br>Damage</center></html>":
+				fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				
+				if(fighter.getAbilityPoints()>=1){
+				fighter.setBlastDamage(fighter.getBlastDamage()+50);
+				refreshFightersList();
+				}
+				
+				else
+					JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+
+				break;
+				
+				
+			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>KI</center></html>":
+				fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+			
+			if(fighter.getAbilityPoints()>=1){
+
+				fighter.setMaxKi(fighter.getMaxKi()+1);
+				refreshFightersList();
+			}
+			else
+				JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+
+					break;
+			
+			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>Stamina</center></html>":
+				fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				
+				if(fighter.getAbilityPoints()>=1){
+				fighter.setStamina(fighter.getMaxStamina()+1);
+				refreshFightersList();
+				}
+				else
+					JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+				break;
+			}
 			worldGUI.repaint();
 			worldGUI.validate();
-			break;
-			}
+			
 		}
 		
+		
+		
+		public void refreshFightersList(){
+			worldGUI.getFightersList().removeAll();
+			worldGUI.getFightersList().updateUI();
+			ArrayList<JButton> x =  worldGUI.getFightersList().getSelect();
+			x = new ArrayList<JButton>();
+			ArrayList<JLabel> y = worldGUI.getFightersList().getUpgrade();
+			y = new ArrayList<JLabel>() ;
+			worldGUI.getFightersList().resetSelectAndUpgrade();
+			worldGUI.getFightersList().add(new JLabel("..."));
+			for(PlayableFighter fighter :gameEngine.getPlayer().getFighters())
+				worldGUI.getFightersList().addFighter(getFighterPanel(fighter));
+			
+			worldGUI.repaint();
+			worldGUI.validate();
+			
+		}
 		public void onCreatingFighter(GGEvent e ){
 			switch(e.getNameOfEvent()){
 			case "Save" : if(worldGUI.getCreatingFighter().getFighter()==null)
@@ -168,8 +265,7 @@ public class GameGUI implements KeyListener {
 			else{
 				save();
 				worldGUI.getCombo().remove(worldGUI.getCreatingFighter());  	
-				ArrayList<JPanel> fighters = getFighterPanels();
-				worldGUI.getFightersList().addFighter(fighters.get(fighters.size()-1));
+				worldGUI.getFightersList().addFighter(getFighterPanel(worldGUI.getCreatingFighter().getFighter()));
 				worldGUI.repaint();
 				worldGUI.validate();
 			}
@@ -190,9 +286,9 @@ public class GameGUI implements KeyListener {
 			case 2 :  gameEngine.getPlayer().getFighters().add(new Saiyan(worldGUI.getCreatingFighter().getNameofPlayer().getText()));break;
 			case 3 :  gameEngine.getPlayer().getFighters().add(new Majin(worldGUI.getCreatingFighter().getNameofPlayer().getText()));break;
 			case 4 :  gameEngine.getPlayer().getFighters().add(new Namekian(worldGUI.getCreatingFighter().getNameofPlayer().getText()));break;
-			default : System.out.println(e.getIndex());
+			default :System.out.println("What?!");
 			}
-			System.out.println(gameEngine.getPlayer().getFighters().size());
+			System.out.println("Now it is " + gameEngine.getPlayer().getFighters().size());
 			worldGUI.getCreatingFighter().setFighter(gameEngine.getPlayer().getFighters().get(gameEngine.getPlayer().getFighters().size()-1));
 			worldGUI.getCombo().remove(worldGUI.getChoooseRace());
 			worldGUI.validate();
@@ -258,11 +354,8 @@ public class GameGUI implements KeyListener {
 	}
 	
 	
-	public ArrayList<JPanel> getFighterPanels(){
-		ArrayList<PlayableFighter> fighters = gameEngine.getPlayer().getFighters();
-		ArrayList<JPanel> fightersPanels = new ArrayList<JPanel>(); 
-		if(fighters.size()!=0){
-				for (PlayableFighter fighter : fighters) {
+	public JPanel getFighterPanel(PlayableFighter fighter){
+		
 					JPanel temp = new JPanel();
 					temp.setLayout(new GridLayout(0, 4));
 					JLabel temp2 = new JLabel();
@@ -275,33 +368,46 @@ public class GameGUI implements KeyListener {
 					JLabel pic =  getPic(getRace(fighter));
 					temp.add(pic);
 					JLabel stats = new JLabel();
-					stats.setLayout(new GridLayout(7,0));
+					stats.setLayout(new GridLayout(6,0));
 					stats.add(new JLabel("Max Health Points: " + fighter.getMaxHealthPoints()));
 					stats.add(new JLabel("Blast Damage: " + fighter.getBlastDamage()));
 					stats.add(new JLabel("Physical Damge: "+ fighter.getPhysicalDamage()));
 					stats.add(new JLabel("Max Ki: "+ fighter.getMaxKi()));
 					stats.add(new JLabel("Max Stamina: " + fighter.getMaxStamina()));
-					stats.add(new JButton("Available SuperAttacks"));
-					stats.add(new JButton("Available UltimateAttacks"));
+					stats.add(new JLabel("Ability Points: " + fighter.getAbilityPoints()));
 					temp.add(stats);
 					JLabel temp3 = new JLabel();
 					temp3.setLayout(new GridLayout(2, 0));
 					JButton select = new JButton("Select");
 					select.addActionListener(worldGUI.getFightersList());
-					JButton upgrade = new JButton("Upgrade");
-					upgrade.addActionListener(worldGUI.getFightersList());
+					JLabel upgrade = new JLabel();
+					upgrade.setLayout(new GridLayout(1,5));
+					JButton maxHealth = new JButton();
+					maxHealth.setText("<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>Health</center></html>");
+					JButton physicalDamage = new JButton();
+					physicalDamage.setText("<html><center>"+"Upgrade"+"<br>"+"Physical"+"<br>Damage</center></html>");
+					JButton blastDamage = new JButton();
+					blastDamage.setText("<html><center>"+"Upgrade"+"<br>"+"Blast"+"<br>Damage</center></html>");
+					JButton maxKi = new JButton();
+					maxKi.setText("<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>KI</center></html>");
+					JButton maxStamina = new JButton();
+					maxStamina.setText("<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>Stamina</center></html>");
+					System.out.println(maxHealth.getText());
+					maxHealth.addActionListener(worldGUI.getFightersList());
+					physicalDamage.addActionListener(worldGUI.getFightersList());
+					blastDamage.addActionListener(worldGUI.getFightersList());
+					maxKi.addActionListener(worldGUI.getFightersList());
+					maxStamina.addActionListener(worldGUI.getFightersList());
+					upgrade.add(maxHealth);upgrade.add(physicalDamage);upgrade.add(blastDamage);upgrade.add(maxKi);
+					upgrade.add(maxStamina);
 					temp3.add(select);
 					worldGUI.getFightersList().getSelect().add(select);
 					temp3.add(upgrade);
 					worldGUI.getFightersList().getUpgrade().add(upgrade);
-					System.out.println(worldGUI.getFightersList().getUpgrade().size());
+					System.out.println("Upgrade size" + worldGUI.getFightersList().getUpgrade().size());
 					temp.add(temp3);
-					//temp.setBorder();
-					fightersPanels.add(temp);
-					
-				}
-		}
-		return fightersPanels;
+					//temp.setBorder();					
+					return temp;
 	}
 	
 	public String getRace (PlayableFighter fighter) {
@@ -332,6 +438,8 @@ public class GameGUI implements KeyListener {
 		if(f.exists()){
 			JOptionPane.showMessageDialog(worldGUI, "Done!");
 			worldGUI.getCombo().remove(worldGUI.getMenu());
+			worldGUI.getCombo().repaint();
+			worldGUI.getCombo().validate();
 		//	worldGUI.getMap().populate();
 			worldGUI.validate();
 			worldGUI.validate();
@@ -374,5 +482,4 @@ public class GameGUI implements KeyListener {
 	}
 	
 	}
-	
-				
+			

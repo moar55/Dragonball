@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class FightersList extends JPanel implements ActionListener{
 	private ArrayList<JPanel> fighters;
 	private WorldFrame world;
 	private ArrayList<JButton> select;
-	private ArrayList<JButton> upgrade;
+	private ArrayList<JLabel> upgrade;
+	private ArrayList<JPanel> stats;
 	private JPanel list ;
 	public FightersList() {
 		
@@ -40,19 +42,7 @@ public class FightersList extends JPanel implements ActionListener{
 		add(title);
 		select = new ArrayList<JButton>();
 
-		upgrade = new ArrayList<JButton>();
-		
-		
-	}
-	
-	public void populate(ArrayList<JPanel> fightersPanels) {
-		
-		for(JPanel panel : fightersPanels){
-			panel.setBorder(BorderFactory.createBevelBorder(50));
-			add(panel);
-		}
-		
-		
+		upgrade = new ArrayList<JLabel>();
 		
 		JButton createFighter = new JButton("Create a Fighter");
 		JButton back = new JButton("Back to game");
@@ -65,10 +55,20 @@ public class FightersList extends JPanel implements ActionListener{
 		add(last);
 		validate();
 		repaint();
+		
+		
 	}
+	
 	
 	public void addFighter (JPanel fighter){
 		remove(getComponentCount()-1);
+		
+		if(getComponentCount()==0){
+		JLabel title = new JLabel("List of Fighters");
+		title.setFont(new Font("Times New Roman",23, 23));
+		title.setHorizontalAlignment((int) CENTER_ALIGNMENT);
+		add(title);
+		}
 		add(fighter);
 		JButton createFighter = new JButton("Create a Fighter");
 		JButton back = new JButton("Back to game");
@@ -79,6 +79,12 @@ public class FightersList extends JPanel implements ActionListener{
 		last.add(createFighter);
 		last.add (back);
 		add(last);
+		
+	}
+	
+	public void resetSelectAndUpgrade (){
+		upgrade = new ArrayList<JLabel>();
+		select = new ArrayList<JButton>();
 	}
 
 
@@ -119,18 +125,30 @@ public class FightersList extends JPanel implements ActionListener{
 		if(((JButton)e.getSource()).getText().equals("Select"))
 		world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText(),findIndex((JButton)e.getSource(),select)));
 		
-		else if(((JButton)e.getSource()).getText().equals("Upgrde"))
-			world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText(),findIndex((JButton)e.getSource(),upgrade)));
-		
-		else
+		else if(((JButton)e.getSource()).getText().equals("Back to game") || ((JButton)e.getSource()).getText().equals("Create a Fighter"))
 			world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText()));
+
+			
+		else
+			world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText(),findIndex((JLabel)((JButton)e.getSource()).getParent(),upgrade)));
+
 			
 	}	
 	
 	public static int findIndex (JButton x , ArrayList <JButton> arrayList) {
 		for(int i = 0 ;i<arrayList.size();i++ ){
 			if(x==arrayList.get(i)){
-				System.out.println(i);
+				//System.out.println(i);
+				return i ;
+			}
+		}
+		return -1;
+	}
+	
+	public static int findIndex (JLabel x , ArrayList <JLabel> arrayList) {
+		for(int i = 0 ;i<arrayList.size();i++ ){
+			if(x==arrayList.get(i)){
+				//System.out.println(i);
 				return i ;
 			}
 		}
@@ -147,11 +165,11 @@ public class FightersList extends JPanel implements ActionListener{
 		this.select = select;
 	}
 
-	public void setUpgrade(ArrayList<JButton> upgrade) {
+	public void setUpgrade(ArrayList<JLabel> upgrade) {
 		this.upgrade = upgrade;
 	}
 
-	public ArrayList<JButton> getUpgrade() {
+	public ArrayList<JLabel> getUpgrade() {
 		return upgrade;
 	}
 	
