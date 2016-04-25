@@ -3,11 +3,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,14 +27,24 @@ public class DragonFrame extends JFrame implements ActionListener {
 	private JButton newsuperattack;
 	private JButton newultimateattack;
 	
-public DragonFrame (){
+public DragonFrame () throws IOException{
 	setVisible(true);
 	this.setLayout(null);
 	
-	setContentPane( new JLabel( (new ImageIcon("Dragon.png"))));
+	
 	Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();		
 	int width  = (int)(Math.round(sizeofScreen.getWidth()));
 	int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
+
+BufferedImage pic = ImageIO.read(new File("Dragon.png"));
+pic.getScaledInstance(sizeofScreen.width, sizeofScreen.height-(int)Math.round(sizeofScreen.getHeight()/14.4), BufferedImage.TYPE_INT_ARGB);
+BufferedImage resizedImage = new BufferedImage(width, height, 	BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(pic, 0, 0, width, height, null);
+		g.dispose();		
+		setContentPane(new JLabel(new ImageIcon(resizedImage)));
+	
+	
 		senzubeans= new JButton("Senzu Beans");
 		senzubeans.setBounds(22, 300, 220, 70);
 	  add(senzubeans);
@@ -64,7 +76,7 @@ public void actionPerformed(ActionEvent arg0) {
 	
 }
 
-public static void main(String[] args) {
+public static void main(String[] args) throws IOException {
 	Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();		
 		int width  = (int)(Math.round(sizeofScreen.getWidth()));
 		int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
