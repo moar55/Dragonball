@@ -39,7 +39,7 @@ public class Game implements PlayerListener,WorldListener,BattleListener ,java.i
 	private ArrayList<Attack> attacks;
 	private ArrayList<Dragon> dragons;
 	private GameState state;
-	private GameListener listener;
+	transient private GameListener listener;
 	private	String savePath = "";
 	
 	public Game() {

@@ -35,6 +35,7 @@ public class WorldFrame extends JFrame {
 	private FightersList fightersList;
 	private CreatingFighter creatingFighter;
 	private ChoooseRace choooseRace;
+	private SuperAndUltimateAttacks superAndUltimateAttacks;
 	
 
 	
@@ -54,14 +55,14 @@ public class WorldFrame extends JFrame {
 
 		add(combo); 
 		
-		map =new Map();
-		map.setBounds(0,0,width,height);
+//		map =new Map(9,9);
+//		map.setBounds(0,0,width,height);
 		menu = new MenuScreen();
 		menu.setWorld(this);
 		menu.setBounds(width/3,height/4,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
 
-		combo.add(map, 0,0);
-		combo.add(menu, 1,0);
+	//	combo.add(map, 0,0);
+		combo.add(menu);
 
 		creatingPlayer = new CreatingPlayer();
 		creatingPlayer.setBounds(width/(width/440),height/(height/150),(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
@@ -79,7 +80,10 @@ public class WorldFrame extends JFrame {
 		choooseRace = new ChoooseRace();
 		choooseRace.setBounds(0,0,width,height);
 		choooseRace.setWorld(this);
-
+		
+		superAndUltimateAttacks = new SuperAndUltimateAttacks();
+		superAndUltimateAttacks.setBounds(width/(width/440),height/(height/150),(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
+		superAndUltimateAttacks.setWorld(this);
 		setTitle("DragonBall");
 		add(combo);
 		validate();
@@ -93,26 +97,28 @@ public class WorldFrame extends JFrame {
 	
 
 	
-	
+	public void addMenu(){
+		combo.add(menu);
+	}
 	
 	public void addCreatingPlayer(){
-		combo.add(creatingPlayer,2,0);
+		combo.add(creatingPlayer);
 	}
 	
 	public void addCreatingFighter(){
-		combo.add(creatingFighter,2,0);
+		combo.add(creatingFighter);
 	}
 	
 	
 	public void addFightersList(){
 		
-		combo.add(fightersList,1,0);
+		combo.add(fightersList);
 	}
 	
 	
 	
 	public void addChooseRace(){
-		combo.add(choooseRace, 3,0);
+		combo.add(choooseRace);
 	}
 	
 	public void createPlayer () {
@@ -174,7 +180,7 @@ public class WorldFrame extends JFrame {
 
 
 
-	public void onEvent(GGEvent e) {
+	public void onEvent(GGEvent e)  {
 			controller.onEvent(e);
 
 	}
@@ -228,6 +234,14 @@ public class WorldFrame extends JFrame {
 
 	public ChoooseRace getChoooseRace() {
 		return choooseRace;
+	}
+
+
+
+
+
+	public SuperAndUltimateAttacks getSuperAndUltimateAttacks() {
+		return superAndUltimateAttacks;
 	}
 	
 	

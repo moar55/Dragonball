@@ -2,6 +2,7 @@ package dragonball.controller;
 
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -21,34 +22,51 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
+import dragonball.model.attack.Attack;
+import dragonball.model.attack.MaximumCharge;
+import dragonball.model.attack.SuperAttack;
+import dragonball.model.attack.SuperSaiyan;
+import dragonball.model.attack.UltimateAttack;
+import dragonball.model.battle.BattleEvent;
+import dragonball.model.cell.Collectible;
 import dragonball.model.character.fighter.Earthling;
 import dragonball.model.character.fighter.Frieza;
 import dragonball.model.character.fighter.Majin;
 import dragonball.model.character.fighter.Namekian;
 import dragonball.model.character.fighter.PlayableFighter;
 import dragonball.model.character.fighter.Saiyan;
+import dragonball.model.dragon.Dragon;
+import dragonball.model.exceptions.MapIndexOutOfBoundsException;
 import dragonball.model.game.Game;
+import dragonball.model.game.GameListener;
+import dragonball.model.player.Player;
 import dragonball.view.ChoooseRace;
 import dragonball.view.CreatingFighter;
 import dragonball.view.CreatingPlayer;
 import dragonball.view.FightersList;
+import dragonball.view.Map;
 import dragonball.view.MenuScreen;
 import dragonball.view.WorldFrame;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class GameGUI implements KeyListener {
+public class GameGUI implements KeyListener ,GameListener {
 
 	private Game gameEngine;
 	private WorldFrame worldGUI;
 	private JFrame introScreen;
 	private MediaPlayer player ;
 	private MediaPlayer transition ;
+	private Map map;
 	
 	public GameGUI() throws IOException {
 		
-		gameEngine= new Game();
+		gameEngine = new Game();
+		System.out.println("I am in the constructor");
 		Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
 		int width  = (int)(Math.round(sizeofScreen.getWidth()));
 		int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
@@ -78,24 +96,28 @@ public class GameGUI implements KeyListener {
 		introScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
-		for(PlayableFighter fighter :gameEngine.getPlayer().getFighters())
-			worldGUI.getFightersList().addFighter(getFighterPanel(fighter));
+		
 			
 			
 		worldGUI = new WorldFrame();
+		worldGUI.addKeyListener(this);
 		worldGUI.setVisible(false);
 		worldGUI.setController(this);
 		worldGUI.getChoooseRace().populate(getRaces());
+		
+		 map = new Map(9,9,this);
+		 map.setController(this);
+		map.setVisible(false);
+		System.out.println("map in constructor is "+ map);
 	}
 	public static void main(String[] args) throws IOException {
 		new GameGUI();
-		getPic("Earthling");
 	//	System.out.println(getCorresponding(2));
 	}
 
 	
 	
-	public void onEvent(GGEvent e) {
+	public void onEvent(GGEvent e)  {
 		if(e.getSource() instanceof MenuScreen)
 			onMenuScreen(e);
 			
@@ -110,18 +132,27 @@ public class GameGUI implements KeyListener {
 		
 			else if (e.getSource() instanceof ChoooseRace)
 				onChooseRace(e);
+		
+			else if ( e.getSource() instanceof Map)
+				onMap(e);
 		}
 		
-		public void onMenuScreen(GGEvent e){
+		public void onMenuScreen(GGEvent e) {
 			switch( e.getNameOfEvent()){
 			
 			case "New Game": gameEngine = new Game();
+							  gameEngine.setListener(this);
+								clean();
 								worldGUI.addCreatingPlayer();
+								worldGUI.repaint();
+								worldGUI.validate();
 								break;
 								
 			case "Save" : save();break;
 			
-			case "Load": load(); break;
+			
+			case "Load": try{load();}catch(IOException IO){System.out.println("oops");}
+			break;
 			case "Exit" : System.exit(0);break;
 			}
 		}
@@ -133,11 +164,11 @@ public class GameGUI implements KeyListener {
 			case "OK" : if(!worldGUI.getCreatingPlayer().getJtextPlayerName().equals("Please enter your player's name: \n")){ 
 							
 				//Supposedly the user has entered a name and the game should start!
-							worldGUI.getCombo().remove(worldGUI.getCreatingPlayer());
-							worldGUI.getCombo().remove(worldGUI.getMenu());
-							worldGUI.repaint();
-							worldGUI.validate(); 
+							
+							clean();
 							worldGUI.addFightersList();
+							String name = worldGUI.getCreatingPlayer().getJtextPlayerName();
+							gameEngine.setPlayer(new Player(name.substring(34)));
 							JOptionPane.showMessageDialog(worldGUI, "You need to create a fighter to start playing ");
 							 		
 
@@ -147,6 +178,7 @@ public class GameGUI implements KeyListener {
 			break;
 			
 			case "Cancel" : worldGUI.getCombo().remove(worldGUI.getCreatingPlayer());
+			worldGUI.getCombo().add(worldGUI.getMenu());
 			worldGUI.repaint();
 			worldGUI.validate();
 			break;
@@ -168,9 +200,24 @@ public class GameGUI implements KeyListener {
 							break;
 							
 							
-			case "Create a Fighter" : worldGUI.addCreatingFighter();break;	
+			case "Create a Fighter" : worldGUI.getCombo().add(worldGUI.getCreatingFighter(), 1,0);worldGUI.validate();worldGUI.repaint();break;	
 			
-			case "Back to game"  : System.out.println("lol");worldGUI.getCombo().remove(worldGUI.getFightersList());break;
+			case "Back to game"  : if(gameEngine.getPlayer().getActiveFighter()==null)
+									JOptionPane.showMessageDialog(worldGUI, "Please select a fighter");
+			
+			else{
+				
+				worldGUI.setFocusable(false);
+				map.setFocusable(true);
+				map.update();
+				System.out.println("map in creating fighter is "+ map);
+				worldGUI.setVisible(false);
+				
+				map.setVisible(true);
+				map.repaint();
+				map.validate();
+			}
+			break;
 			
 			
 			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>Health</center></html>": 
@@ -240,6 +287,21 @@ public class GameGUI implements KeyListener {
 		}
 		
 		
+		public void clean(){
+			worldGUI.getCombo().removeAll();
+			
+		}
+		public void onMap(GGEvent e){
+			clean();
+			refreshFightersList();
+			worldGUI.addFightersList();
+			map.setVisible(false);
+			
+		//	worldGUI.addFightersList();
+			
+			worldGUI.setVisible(true);
+			
+		}
 		
 		public void refreshFightersList(){
 			worldGUI.getFightersList().removeAll();
@@ -264,15 +326,21 @@ public class GameGUI implements KeyListener {
 			
 			else{
 				save();
-				worldGUI.getCombo().remove(worldGUI.getCreatingFighter());  	
+				
 				worldGUI.getFightersList().addFighter(getFighterPanel(worldGUI.getCreatingFighter().getFighter()));
+				//worldGUI.get
+				clean();
+				worldGUI.addFightersList();
 				worldGUI.repaint();
 				worldGUI.validate();
 			}
 			
 			break;
-			case "Fighter's Race:" : worldGUI.addChooseRace();JOptionPane.showMessageDialog(worldGUI,"Alright Player; choose a class!");break;
-			case "Cancel" : worldGUI.getCombo().remove(worldGUI.getCreatingFighter());
+			case "Fighter's Race:" :worldGUI.getCombo().add(worldGUI.getChoooseRace(),2,0);JOptionPane.showMessageDialog(worldGUI,"Alright Player; choose a class!");break;
+			case "Cancel" : 
+				
+					clean();
+					worldGUI.addFightersList();
 					worldGUI.repaint();
 					worldGUI.validate();
 					break;
@@ -288,9 +356,13 @@ public class GameGUI implements KeyListener {
 			case 4 :  gameEngine.getPlayer().getFighters().add(new Namekian(worldGUI.getCreatingFighter().getNameofPlayer().getText()));break;
 			default :System.out.println("What?!");
 			}
+			if(gameEngine.getPlayer().getFighters().size() ==1)
+				gameEngine.getPlayer().setActiveFighter(gameEngine.getPlayer().getFighters().get(0));
 			System.out.println("Now it is " + gameEngine.getPlayer().getFighters().size());
 			worldGUI.getCreatingFighter().setFighter(gameEngine.getPlayer().getFighters().get(gameEngine.getPlayer().getFighters().size()-1));
 			worldGUI.getCombo().remove(worldGUI.getChoooseRace());
+//			worldGUI.add(worldGUI.getFightersList());
+//			worldGUI.add(worldGUI.getCreatingFighter());
 			worldGUI.validate();
 			worldGUI.repaint();
 	}
@@ -304,12 +376,12 @@ public class GameGUI implements KeyListener {
 		temp.setLayout(new GridLayout(0, 1));
 		JLabel race = new JLabel();
 		race.setLayout(new GridLayout(1, 2));
-		race.add(new JLabel("Race: "+getCorresponding(i)));
-		race.add(getPic(getCorresponding(i)));
+		race.add(new JLabel("Race: "+getCorerspondingRace(i)));
+		race.add(getPic(getCorerspondingRace(i)));
 		temp.add(race);
 		PlayableFighter fighter=null;
 		
-		switch(getCorresponding(i)){
+		switch(getCorerspondingRace(i)){
 		case "Earthling": fighter= new Earthling("random");break;
 		case "Frieza" : fighter = new Frieza("random");break;
 		case "Saiyan" : fighter = new Saiyan("random");break;
@@ -331,7 +403,7 @@ public class GameGUI implements KeyListener {
 		return races;
 	}
 	
-	public  String getCorresponding (int i){
+	public  String getCorerspondingRace (int i){
 		switch(i){
 		case  0 : return"Earthling";
 		case 1 :return "Frieza" ;
@@ -341,6 +413,12 @@ public class GameGUI implements KeyListener {
 		}
 		return null;
 	}
+	
+//	public Attack getCorrespondingAttack(int i ){
+//		switch(i){
+//		// s
+//		}
+	//}
 	
 	public static JLabel getPic (String st){
 		switch(st){
@@ -375,6 +453,9 @@ public class GameGUI implements KeyListener {
 					stats.add(new JLabel("Max Ki: "+ fighter.getMaxKi()));
 					stats.add(new JLabel("Max Stamina: " + fighter.getMaxStamina()));
 					stats.add(new JLabel("Ability Points: " + fighter.getAbilityPoints()));
+					JButton SUAttacks = new JButton("<html><center>"+"Super/ Ultimate"+"<br> Attacks</center></html>");
+					SUAttacks.addActionListener(worldGUI.getFightersList());
+					stats.add(SUAttacks);
 					temp.add(stats);
 					JLabel temp3 = new JLabel();
 					temp3.setLayout(new GridLayout(2, 0));
@@ -410,6 +491,8 @@ public class GameGUI implements KeyListener {
 					return temp;
 	}
 	
+			
+		
 	public String getRace (PlayableFighter fighter) {
 		
 		if(fighter instanceof Earthling ) return "Earthling";
@@ -433,16 +516,83 @@ public class GameGUI implements KeyListener {
 			JOptionPane.showMessageDialog(worldGUI,"Game Saved!(if no bugs occured lol)");
 	}
 	
-	public void load(){
+	public ArrayList<JButton> getSuperAttacksButtons(Player player) {
+		
+		ArrayList <JButton> output  = new ArrayList<JButton>() ;
+		for(SuperAttack attack : player.getSuperAttacks()){
+			JButton temp;
+			if(attack instanceof MaximumCharge){
+			  temp = new JButton("<html><center>"+"Maxmimum Charge"+"<br>Requires 0 KI"+"<br>Afflicts 0 Damage"+"<br>Charges 3 KI</center></html>");
+			  temp.setFont(new Font("Times New Roman",5,5));
+			}
+			
+			else
+				temp= new JButton("<html><center>"+ attack.getName() + "<br>Damage: "+attack.getDamage()+"</ceneter></html>");
+			  
+			output.add(temp);  
+		}
+		return output;
+	}
+	
+	public ArrayList <JButton> getUltimateAttacksButtons(Player player){
+		ArrayList <JButton> output  = new ArrayList<JButton>() ;
+		for(UltimateAttack attack : player.getUltimateAttacks()){
+			JButton temp;
+			if(attack instanceof SuperSaiyan){
+				 temp = new JButton("<html><center>"+"Super Saiyan"+"<br>Exclusive for Saiyan"+"<br>Requires 3 KI bar but consumes 1 per turn"+"<br>Afflicted Damage: 0" + "<br> Increases damage by 25% until KI is 0</center></html>");
+				 temp.setFont(new Font("Times New Roman",5,5));
+			}
+				 else
+					 temp =new JButton("<html><center>"+ attack.getName() + "<br> Damage: "+attack.getDamage()+"</ceneter></html>");
+
+				output.add(temp);
+			}
+		
+		return output;
+	}
+	
+	public void load() throws IOException {
 		File f  = new File("SaveData.ser");
 		if(f.exists()){
 			JOptionPane.showMessageDialog(worldGUI, "Done!");
-			worldGUI.getCombo().remove(worldGUI.getMenu());
+		
 			worldGUI.getCombo().repaint();
 			worldGUI.getCombo().validate();
+			worldGUI.addFightersList();
+			for(PlayableFighter fighter :gameEngine.getPlayer().getFighters()){
+				worldGUI.getFightersList().addFighter(getFighterPanel(fighter));
+				
+			}
+			
+			for(JButton button: getSuperAttacksButtons(gameEngine.getPlayer()) ){
+				worldGUI.getSuperAndUltimateAttacks().addSuperAttack(button);
+				}
+				
+				for(JButton button : getUltimateAttacksButtons(gameEngine.getPlayer())){
+					worldGUI.getSuperAndUltimateAttacks().addUltimateAttack(button);
+				}
+				
+				
+			//	}
+				//worldGUI.getSuperAndUltimateAttacks().addUltimateAttack(getAttackButtons("Ultimate"));
+			
+			
 		//	worldGUI.getMap().populate();
-			worldGUI.validate();
-			worldGUI.validate();
+			Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
+			int width  = (int)(Math.round(sizeofScreen.getWidth()));
+			int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
+			gameEngine.load("SaveData.ser");
+			gameEngine.setListener(this);
+	
+			
+			map= new  Map(gameEngine.getWorld().getPlayerRow(), gameEngine.getWorld().getPlayerColumn(),this);
+			map.populate();
+			map.setController(this);
+			map.setFocusable(true);
+			worldGUI.setFocusable(false);
+			map.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			worldGUI.setVisible(false);
+			map.setVisible(true);
 		}
 		else
 			JOptionPane.showMessageDialog(worldGUI, "No previous save data");
@@ -460,7 +610,9 @@ public class GameGUI implements KeyListener {
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		
+		System.out.println(e.getKeyCode());
+		if(e.getSource() == introScreen){
 		transition= new MediaPlayer(new Media(Paths.get("selected.mp3").toUri().toString()));
 		transition.play();
 		try {
@@ -473,12 +625,132 @@ public class GameGUI implements KeyListener {
 		introScreen.setVisible(false);
 		transition=null;
 		worldGUI.setVisible(true);
+		}
+		
+		else if (e.getSource() == worldGUI){
+			switch(e.getKeyCode()){
+			
+			case KeyEvent.VK_ESCAPE : worldGUI.getCombo().remove(worldGUI.getMenu());worldGUI.setVisible(false);
+				map.setVisible(true);worldGUI.setFocusable(false);map.setFocusable(true);break;
+			}
+		}
+		
+		
+		else if (e.getSource() == map){
+			 
+			switch(e.getKeyCode()){
+			case KeyEvent.VK_ESCAPE: 
+					System.out.println("HeeeI");
+					map.setVisible(false);
+					
+					clean();
+					worldGUI.addMenu();
+					worldGUI.setVisible(true);
+					map.setFocusable(false);
+				worldGUI.setFocusable(true);
+				break;
+				
+			case KeyEvent.VK_LEFT :
+					moveLeft();
+					break;
+			case  KeyEvent.VK_A: moveLeft();
+			 break;
+				
+			case KeyEvent.VK_RIGHT : moveRight();break;
+			case KeyEvent.VK_D  : moveRight();break;
+			
+			case KeyEvent.VK_UP : moveUp();break;
+			case KeyEvent.VK_W : moveUp(); break;
+			
+			case KeyEvent.VK_DOWN : moveDown();break;
+			case KeyEvent.VK_S : moveDown();break;
+		}
 	}
 	
+	}
+	
+	
+	
+	
+	
+	public Game getGameEngine() {
+		return gameEngine;
+	}
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void onDragonCalled(Dragon dragon) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onCollectibleFound(Collectible collectible) {
+		String st = (collectible==Collectible.DRAGON_BALL)? "dragon ball": "senzu bean";
+		JOptionPane.showMessageDialog(map, "You have collected a "+ st+"!");
+		
+	}
+	@Override
+	public void onBattleEvent(BattleEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void moveLeft()  {
+	
+		gameEngine.getWorld().moveLeft();	
+		System.out.println(gameEngine.getWorld().getPlayerColumn());
+		map.setPlayerRow(gameEngine.getWorld().getPlayerRow());
+		map.setPlayerColumn(gameEngine.getWorld().getPlayerColumn());
+		map.update();
+		map.validate();
+		map.repaint();
+	}
+	
+	public void moveRight(){
+		try{
+			gameEngine.getWorld().moveRight();
+			}
+			catch(IndexOutOfBoundsException e){
+				JOptionPane.showMessageDialog(map, "You can't move there!");
+			}
+		map.setPlayerRow(gameEngine.getWorld().getPlayerRow());
+		map.setPlayerColumn(gameEngine.getWorld().getPlayerColumn());
+		map.update();
+		map.validate();
+		map.repaint();
+		
+		
+		}
+	
+	public void moveUp(){
+		try{
+			gameEngine.getWorld().moveUp();
+			}
+			catch(IndexOutOfBoundsException e){
+				JOptionPane.showMessageDialog(map, "You can't move there!");
+			}
+		
+		map.setPlayerRow(gameEngine.getWorld().getPlayerRow());
+		map.setPlayerColumn(gameEngine.getWorld().getPlayerColumn());
+		map.update();
+		map.validate();
+		map.repaint();
+	}
+	public void moveDown(){
+		try{
+			gameEngine.getWorld().moveDown();
+			}
+			catch(IndexOutOfBoundsException e){
+				JOptionPane.showMessageDialog(map, "You can't move there!");
+			}
+		map.setPlayerRow(gameEngine.getWorld().getPlayerRow());
+		map.setPlayerColumn(gameEngine.getWorld().getPlayerColumn());
+		map.update();
+		map.validate();
+		map.repaint();
 	}
 	
 	}
