@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import com.sun.corba.se.spi.orbutil.fsm.Action;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import dragonball.controller.GGEvent;
 import dragonball.controller.GameGUI;
@@ -31,6 +32,7 @@ public class FightersList extends JPanel implements ActionListener{
 	private WorldFrame world;
 	private ArrayList<JButton> select;
 	private ArrayList<JLabel> upgrade;
+	private ArrayList<JButton> attacks;
 	private ArrayList<JPanel> stats;
 	private JPanel list ;
 	public FightersList() {
@@ -43,6 +45,8 @@ public class FightersList extends JPanel implements ActionListener{
 		select = new ArrayList<JButton>();
 
 		upgrade = new ArrayList<JLabel>();
+		
+		attacks = new ArrayList<JButton>();
 		
 		JButton createFighter = new JButton("Create a Fighter");
 		JButton back = new JButton("Back to game");
@@ -125,6 +129,9 @@ public class FightersList extends JPanel implements ActionListener{
 		if(((JButton)e.getSource()).getText().equals("Select"))
 		world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText(),findIndex((JButton)e.getSource(),select)));
 		
+		else if (((JButton)e.getSource()).getText().equals("<html><center>"+"Super/ Ultimate"+"<br> Attacks</center></html>"))
+			world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText(),findIndex((JButton)e.getSource(),attacks)));
+		
 		else if(((JButton)e.getSource()).getText().equals("Back to game") || ((JButton)e.getSource()).getText().equals("Create a Fighter"))
 			world.onEvent(new GGEvent(this, ((JButton)e.getSource()).getText()));
 
@@ -168,14 +175,25 @@ public class FightersList extends JPanel implements ActionListener{
 	public void setUpgrade(ArrayList<JLabel> upgrade) {
 		this.upgrade = upgrade;
 	}
+	
 
 	public ArrayList<JLabel> getUpgrade() {
 		return upgrade;
 	}
-	
-	
-	
-	
-	
+
+
+	public ArrayList<JButton> getAttacks() {
+		return attacks;
+	}
+
+
+	public ArrayList<JPanel> getStats() {
+		return stats;
+	}
+
+
+	public JPanel getList() {
+		return list;
+	}
 	
 }

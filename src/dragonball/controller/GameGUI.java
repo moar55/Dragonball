@@ -49,10 +49,12 @@ import dragonball.view.CreatingPlayer;
 import dragonball.view.FightersList;
 import dragonball.view.Map;
 import dragonball.view.MenuScreen;
+import dragonball.view.SuperAndUltimateAttacks;
 import dragonball.view.WorldFrame;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class GameGUI implements KeyListener ,GameListener {
 
@@ -135,7 +137,10 @@ public class GameGUI implements KeyListener ,GameListener {
 		
 			else if ( e.getSource() instanceof Map)
 				onMap(e);
-		}
+		
+			
+			}
+		
 		
 		public void onMenuScreen(GGEvent e) {
 			switch( e.getNameOfEvent()){
@@ -170,8 +175,12 @@ public class GameGUI implements KeyListener ,GameListener {
 							String name = worldGUI.getCreatingPlayer().getJtextPlayerName();
 							gameEngine.setPlayer(new Player(name.substring(34)));
 							JOptionPane.showMessageDialog(worldGUI, "You need to create a fighter to start playing ");
-							 		
-
+							gameEngine.getPlayer().getSuperAttacks().add(new SuperAttack("Killer", 50));
+							gameEngine.getPlayer().getSuperAttacks().add(new SuperAttack("Destroyer", 100));
+							gameEngine.getPlayer().getUltimateAttacks().add(new UltimateAttack("WOW", 200));
+							gameEngine.getPlayer().getUltimateAttacks().add(new UltimateAttack("PEW", 150)); 		
+							gameEngine.getPlayer().getUltimateAttacks().add(new SuperSaiyan());
+							gameEngine.getPlayer().getSuperAttacks().add(new MaximumCharge());
 							}
 							else 
 							JOptionPane.showMessageDialog(worldGUI, "You can't set a Player with out a name! " );
@@ -195,9 +204,34 @@ public class GameGUI implements KeyListener ,GameListener {
 							gameEngine.getPlayer().setActiveFighter(gameEngine.getPlayer().getFighters().get(e.getIndex()));
 							break;
 			
-			case "Upgrade" :  
-							//worldGUI.addUpgradingPlayer(); worldGUI.getUpgradingPlayer.setFighter(gameEngine.getPlayer().getFighters().get(e.getIndex()));
-							break;
+			case "<html><center>"+"Super/ Ultimate"+"<br> Attacks</center></html>" :  
+				
+				System.out.println("size is " + worldGUI.getFightersList().getAttacks().size());
+				PlayableFighter fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+//				fighter.getSuperAttacks().add(gameEngine.getPlayer().getSuperAttacks().get(0));
+//				fighter.getSuperAttacks().add(gameEngine.getPlayer().getSuperAttacks().get(1));
+				worldGUI.addSuperandUltimateAttacks(fighter);
+				
+				
+				for(SuperAttack attack : gameEngine.getPlayer().getSuperAttacks()){
+					Boolean used = false;
+					if(fighter.getSuperAttacks().contains(attack))
+						used=true;
+					worldGUI.getSuperAndUltimateAttacks().addSuperAttack(getSuperAttackButton(attack), used);
+				}
+				
+				for(UltimateAttack attack : gameEngine.getPlayer().getUltimateAttacks()){
+					Boolean used = false;
+					if(fighter.getUltimateAttacks().contains(attack))
+						used=true;
+					worldGUI.getSuperAndUltimateAttacks().addUltimateAttack(getUltimateAttackButton(attack), used);
+				}
+				
+				clean();
+				System.out.println("HIee");
+				worldGUI.getCombo().add(worldGUI.getFightersList(),0,0);
+				worldGUI.getCombo().add(worldGUI.getSuperAndUltimateAttacks(), 1,0);
+				break;
 							
 							
 			case "Create a Fighter" : worldGUI.getCombo().add(worldGUI.getCreatingFighter(), 1,0);worldGUI.validate();worldGUI.repaint();break;	
@@ -214,6 +248,7 @@ public class GameGUI implements KeyListener ,GameListener {
 				worldGUI.setVisible(false);
 				
 				map.setVisible(true);
+				mapMusic();
 				map.repaint();
 				map.validate();
 			}
@@ -223,9 +258,9 @@ public class GameGUI implements KeyListener ,GameListener {
 			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>Health</center></html>": 
 				
 				
-				PlayableFighter fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
-				if(fighter.getAbilityPoints()>=1){
-				fighter.setMaxHealthPoints(fighter.getMaxHealthPoints()+50);
+				PlayableFighter fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				if(fighter1.getAbilityPoints()>=1){
+				fighter1.setMaxHealthPoints(fighter1.getMaxHealthPoints()+50);
 				refreshFightersList();}
 				
 				else 
@@ -233,9 +268,9 @@ public class GameGUI implements KeyListener ,GameListener {
 				break;
 			
 			case "<html><center>"+"Upgrade"+"<br>"+"Physical"+"<br>Damage</center></html>": 
-				 fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
-				if(fighter.getAbilityPoints()>=1){
-				fighter.setPhysicalDamage(fighter.getPhysicalDamage()+50);
+				 fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				if(fighter1.getAbilityPoints()>=1){
+				fighter1.setPhysicalDamage(fighter1.getPhysicalDamage()+50);
 				refreshFightersList();
 				}
 				else
@@ -244,10 +279,10 @@ public class GameGUI implements KeyListener ,GameListener {
 			
 				
 			case "<html><center>"+"Upgrade"+"<br>"+"Blast"+"<br>Damage</center></html>":
-				fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
 				
-				if(fighter.getAbilityPoints()>=1){
-				fighter.setBlastDamage(fighter.getBlastDamage()+50);
+				if(fighter1.getAbilityPoints()>=1){
+				fighter1.setBlastDamage(fighter1.getBlastDamage()+50);
 				refreshFightersList();
 				}
 				
@@ -258,11 +293,11 @@ public class GameGUI implements KeyListener ,GameListener {
 				
 				
 			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>KI</center></html>":
-				fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
 			
-			if(fighter.getAbilityPoints()>=1){
+			if(fighter1.getAbilityPoints()>=1){
 
-				fighter.setMaxKi(fighter.getMaxKi()+1);
+				fighter1.setMaxKi(fighter1.getMaxKi()+1);
 				refreshFightersList();
 			}
 			else
@@ -271,10 +306,10 @@ public class GameGUI implements KeyListener ,GameListener {
 					break;
 			
 			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>Stamina</center></html>":
-				fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
+				fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
 				
-				if(fighter.getAbilityPoints()>=1){
-				fighter.setStamina(fighter.getMaxStamina()+1);
+				if(fighter1.getAbilityPoints()>=1){
+				fighter1.setStamina(fighter1.getMaxStamina()+1);
 				refreshFightersList();
 				}
 				else
@@ -306,10 +341,11 @@ public class GameGUI implements KeyListener ,GameListener {
 		public void refreshFightersList(){
 			worldGUI.getFightersList().removeAll();
 			worldGUI.getFightersList().updateUI();
-			ArrayList<JButton> x =  worldGUI.getFightersList().getSelect();
-			x = new ArrayList<JButton>();
-			ArrayList<JLabel> y = worldGUI.getFightersList().getUpgrade();
-			y = new ArrayList<JLabel>() ;
+			 worldGUI.getFightersList().getSelect().clear();
+			worldGUI.getFightersList().getUpgrade().clear();;
+		
+			worldGUI.getFightersList().getAttacks().clear();
+			
 			worldGUI.getFightersList().resetSelectAndUpgrade();
 			worldGUI.getFightersList().add(new JLabel("..."));
 			for(PlayableFighter fighter :gameEngine.getPlayer().getFighters())
@@ -454,6 +490,8 @@ public class GameGUI implements KeyListener ,GameListener {
 					stats.add(new JLabel("Max Stamina: " + fighter.getMaxStamina()));
 					stats.add(new JLabel("Ability Points: " + fighter.getAbilityPoints()));
 					JButton SUAttacks = new JButton("<html><center>"+"Super/ Ultimate"+"<br> Attacks</center></html>");
+					worldGUI.getFightersList().getAttacks().add(SUAttacks);
+					System.out.println("AWESOOOOOME");
 					SUAttacks.addActionListener(worldGUI.getFightersList());
 					stats.add(SUAttacks);
 					temp.add(stats);
@@ -516,39 +554,34 @@ public class GameGUI implements KeyListener ,GameListener {
 			JOptionPane.showMessageDialog(worldGUI,"Game Saved!(if no bugs occured lol)");
 	}
 	
-	public ArrayList<JButton> getSuperAttacksButtons(Player player) {
+	public JButton getSuperAttackButton(SuperAttack attack) {
 		
-		ArrayList <JButton> output  = new ArrayList<JButton>() ;
-		for(SuperAttack attack : player.getSuperAttacks()){
+	
 			JButton temp;
 			if(attack instanceof MaximumCharge){
 			  temp = new JButton("<html><center>"+"Maxmimum Charge"+"<br>Requires 0 KI"+"<br>Afflicts 0 Damage"+"<br>Charges 3 KI</center></html>");
-			  temp.setFont(new Font("Times New Roman",5,5));
+			  temp.setFont(new Font("Times New Roman",15,15));
 			}
 			
 			else
 				temp= new JButton("<html><center>"+ attack.getName() + "<br>Damage: "+attack.getDamage()+"</ceneter></html>");
 			  
-			output.add(temp);  
-		}
-		return output;
+			return temp;  
+		
 	}
 	
-	public ArrayList <JButton> getUltimateAttacksButtons(Player player){
-		ArrayList <JButton> output  = new ArrayList<JButton>() ;
-		for(UltimateAttack attack : player.getUltimateAttacks()){
+	public JButton getUltimateAttackButton(UltimateAttack attack){
+	
 			JButton temp;
 			if(attack instanceof SuperSaiyan){
-				 temp = new JButton("<html><center>"+"Super Saiyan"+"<br>Exclusive for Saiyan"+"<br>Requires 3 KI bar but consumes 1 per turn"+"<br>Afflicted Damage: 0" + "<br> Increases damage by 25% until KI is 0</center></html>");
-				 temp.setFont(new Font("Times New Roman",5,5));
+				 temp = new JButton("<html><center>"+"Super Saiyan"+"<br>Exclusive for Saiyan"+"<br>Requires 3 KI bars but consumes 1 per turn"+"<br>Afflicted Damage: 0" + "<br> Increases damage by 25% until KI is 0</center></html>");
+				 temp.setFont(new Font("Times New Roman",15,15));
 			}
 				 else
 					 temp =new JButton("<html><center>"+ attack.getName() + "<br> Damage: "+attack.getDamage()+"</ceneter></html>");
 
-				output.add(temp);
-			}
-		
-		return output;
+				return temp;
+			
 	}
 	
 	public void load() throws IOException {
@@ -564,13 +597,7 @@ public class GameGUI implements KeyListener ,GameListener {
 				
 			}
 			
-			for(JButton button: getSuperAttacksButtons(gameEngine.getPlayer()) ){
-				worldGUI.getSuperAndUltimateAttacks().addSuperAttack(button);
-				}
-				
-				for(JButton button : getUltimateAttacksButtons(gameEngine.getPlayer())){
-					worldGUI.getSuperAndUltimateAttacks().addUltimateAttack(button);
-				}
+
 				
 				
 			//	}
@@ -593,6 +620,7 @@ public class GameGUI implements KeyListener ,GameListener {
 			map.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			worldGUI.setVisible(false);
 			map.setVisible(true);
+			mapMusic();
 		}
 		else
 			JOptionPane.showMessageDialog(worldGUI, "No previous save data");
@@ -631,7 +659,7 @@ public class GameGUI implements KeyListener ,GameListener {
 			switch(e.getKeyCode()){
 			
 			case KeyEvent.VK_ESCAPE : worldGUI.getCombo().remove(worldGUI.getMenu());worldGUI.setVisible(false);
-				map.setVisible(true);worldGUI.setFocusable(false);map.setFocusable(true);break;
+				map.setVisible(true);mapMusic();worldGUI.setFocusable(false);map.setFocusable(true);break;
 			}
 		}
 		
@@ -688,6 +716,16 @@ public class GameGUI implements KeyListener ,GameListener {
 	}
 	@Override
 	public void onCollectibleFound(Collectible collectible) {
+		player.pause();
+		transition = new MediaPlayer(new Media(Paths.get("Sounds\\pickup.wav").toUri().toString()));
+		transition.setStartTime(Duration.seconds(1));
+		transition.play();
+		try{Thread.sleep(900);
+		}
+		catch(Exception e){
+			JOptionPane.showMessageDialog(map, "Something went wrong!");
+		}
+		player.play();
 		String st = (collectible==Collectible.DRAGON_BALL)? "dragon ball": "senzu bean";
 		JOptionPane.showMessageDialog(map, "You have collected a "+ st+"!");
 		
@@ -753,5 +791,22 @@ public class GameGUI implements KeyListener ,GameListener {
 		map.repaint();
 	}
 	
+	
+	public void mapMusic(){
+		player.pause();
+		player =new MediaPlayer(new Media(Paths.get("Sounds\\map.mp3").toUri().toString()));
+	    player.setOnEndOfMedia(new Runnable() {
+			
+			@Override
+			
+			public void run() {
+				// TODO Auto-generated method stub
+				player.seek(Duration.ZERO);
+			}
+		});
+	    player.play();
 	}
+	
+	
+}
 			

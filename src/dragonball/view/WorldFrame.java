@@ -1,6 +1,7 @@
 package dragonball.view;	
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.Window;
 
 import javax.swing.JButton;
@@ -20,6 +22,9 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import dragonball.controller.GGEvent;
 import dragonball.controller.GameGUI;
+import dragonball.model.attack.SuperAttack;
+import dragonball.model.attack.UltimateAttack;
+import dragonball.model.character.fighter.PlayableFighter;
 
 
 public class WorldFrame extends JFrame {
@@ -36,19 +41,20 @@ public class WorldFrame extends JFrame {
 	private CreatingFighter creatingFighter;
 	private ChoooseRace choooseRace;
 	private SuperAndUltimateAttacks superAndUltimateAttacks;
-	
-
+	private boolean selected;
+	Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
+	int width  = (int)(Math.round(sizeofScreen.getWidth()));
+	int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
 	
 	public WorldFrame() throws IOException {
 			
 		
 		combo = new JLayeredPane();		
 		//combo.setBounds(0,0,1280,720);
-		Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
+		
 	//	Rectangle windowSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		
-		int width  = (int)(Math.round(sizeofScreen.getWidth()));
-		int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
+		
 		setLayout(new BorderLayout());
 		combo = new JLayeredPane();		
 		//combo.setBounds(0,0,width,height);
@@ -81,9 +87,7 @@ public class WorldFrame extends JFrame {
 		choooseRace.setBounds(0,0,width,height);
 		choooseRace.setWorld(this);
 		
-		superAndUltimateAttacks = new SuperAndUltimateAttacks();
-		superAndUltimateAttacks.setBounds(width/(width/440),height/(height/150),(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
-		superAndUltimateAttacks.setWorld(this);
+
 		setTitle("DragonBall");
 		add(combo);
 		validate();
@@ -121,9 +125,14 @@ public class WorldFrame extends JFrame {
 		combo.add(choooseRace);
 	}
 	
-	public void createPlayer () {
+	public void addSuperandUltimateAttacks(PlayableFighter fighter){
+		superAndUltimateAttacks = new SuperAndUltimateAttacks(fighter);
+		superAndUltimateAttacks.setWorld(this);
+		superAndUltimateAttacks.setBounds((int)Math.round(width/6),(int)Math.round(height/4.5),(int)(Math.round(width/1.5)),(int)(Math.round(height/1.6)));
 		
 	}
+	
+	
 	
 	
 	
@@ -180,6 +189,30 @@ public class WorldFrame extends JFrame {
 
 
 
+	
+	public void setAttacks(PlayableFighter fighter){
+		System.out.println("Hi");
+		ArrayList <SuperAttack> superAttacks = fighter.getSuperAttacks();
+		superAttacks.clear();
+		System.out.println(superAndUltimateAttacks);
+		for(JButton button : superAndUltimateAttacks.getListofSuper())
+			if(button.getBackground()==Color.gray)
+				superAttacks.add(controller.getGameEngine().getPlayer().getSuperAttacks().get(FightersList.findIndex(button, superAndUltimateAttacks.getListofSuper())));
+			
+		ArrayList <UltimateAttack> ultimateAttacks = fighter.getUltimateAttacks();
+		ultimateAttacks.clear();
+		for(JButton button : superAndUltimateAttacks.getListofUltimate())
+			if(button.getBackground()==Color.gray  )
+				ultimateAttacks.add(controller.getGameEngine().getPlayer().getUltimateAttacks().get(FightersList.findIndex(button, superAndUltimateAttacks.getListofUltimate())));
+		
+		combo.remove(superAndUltimateAttacks);
+		
+		for (SuperAttack attack:fighter.getSuperAttacks())
+			System.out.println(attack.getName());
+		repaint();
+		validate();
+	}			
+	
 	public void onEvent(GGEvent e)  {
 			controller.onEvent(e);
 
@@ -242,6 +275,18 @@ public class WorldFrame extends JFrame {
 
 	public SuperAndUltimateAttacks getSuperAndUltimateAttacks() {
 		return superAndUltimateAttacks;
+	}
+
+
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 	
 	
