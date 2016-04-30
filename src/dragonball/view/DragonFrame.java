@@ -21,11 +21,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import dragonball.controller.GameGUI;
+
 public class DragonFrame extends JFrame implements ActionListener {
 	private JButton senzubeans; 
 	private JButton abilitypoints;
 	private JButton newsuperattack;
 	private JButton newultimateattack;
+	private GameGUI dragoncontroller;
 	
 public DragonFrame () throws IOException{
 	setVisible(true);
@@ -47,20 +50,25 @@ BufferedImage resizedImage = new BufferedImage(width, height, 	BufferedImage.TYP
 	
 		senzubeans= new JButton("Senzu Beans");
 		senzubeans.setBounds(22, 300, 220, 70);
+		senzubeans.addActionListener(this);
 	  add(senzubeans);
 	  
 	  abilitypoints = new JButton("Ability Points");
 	  abilitypoints.setBounds(22,375,220,70);
+	  abilitypoints.addActionListener(this);
 	 add (abilitypoints);
 	 
 	 newsuperattack = new JButton("New SuperAttack");
 	 newsuperattack.setBounds(22,450,220,70);
+	 abilitypoints.addActionListener(this);
 	 add (newsuperattack);
 	 
 	 newultimateattack = new JButton("New UltimateAttack");
 	 newultimateattack.setBounds(22,525,220,70);
+	 newultimateattack.addActionListener(this);
 	add (newultimateattack);
 	setSize(width,height);
+	
 	setExtendedState(JFrame.MAXIMIZED_BOTH);
 	setVisible(true);
 	 
@@ -72,7 +80,7 @@ BufferedImage resizedImage = new BufferedImage(width, height, 	BufferedImage.TYP
 
 @Override
 public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
+
 	
 }
 

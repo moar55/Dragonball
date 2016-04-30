@@ -46,6 +46,7 @@ import dragonball.model.player.Player;
 import dragonball.view.ChoooseRace;
 import dragonball.view.CreatingFighter;
 import dragonball.view.CreatingPlayer;
+import dragonball.view.DragonFrame;
 import dragonball.view.FightersList;
 import dragonball.view.Map;
 import dragonball.view.MenuScreen;
@@ -64,6 +65,7 @@ public class GameGUI implements KeyListener ,GameListener {
 	private MediaPlayer player ;
 	private MediaPlayer transition ;
 	private Map map;
+	private DragonFrame dragonframe;
 	
 	public GameGUI() throws IOException {
 		
@@ -711,7 +713,10 @@ public class GameGUI implements KeyListener ,GameListener {
 	}
 	@Override
 	public void onDragonCalled(Dragon dragon) {
-		// TODO Auto-generated method stub
+		try{new DragonFrame();}
+		catch(Exception e){
+			JOptionPane.showMessageDialog(dragonframe, "Something went wrong!");
+		}
 		
 	}
 	@Override
