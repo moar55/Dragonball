@@ -9,13 +9,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Window;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+
+import com.sun.prism.Image;
 
 import java.awt.Rectangle;
 
@@ -45,6 +53,7 @@ public class WorldFrame extends JFrame {
 	Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
 	int width  = (int)(Math.round(sizeofScreen.getWidth()));
 	int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
+	private BufferedImage  pic;
 	
 	public WorldFrame() throws IOException {
 			
@@ -59,7 +68,7 @@ public class WorldFrame extends JFrame {
 		combo = new JLayeredPane();		
 		//combo.setBounds(0,0,width,height);
 
-		add(combo); 
+		//add(combo); 
 		
 //		map =new Map(9,9);
 //		map.setBounds(0,0,width,height);
@@ -68,8 +77,14 @@ public class WorldFrame extends JFrame {
 		menu.setBounds(width/3,height/4,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
 
 	//	combo.add(map, 0,0);
-		combo.add(menu);
-
+		
+		pic = ImageIO.read(new File("IntroScreen.png"));
+		
+		setContentPane(new JLabel(new ImageIcon(pic)));
+		add(menu);
+		menu.setVisible(true);
+		combo.add(menu,0,0);
+		
 		creatingPlayer = new CreatingPlayer();
 		creatingPlayer.setBounds(width/(width/440),height/(height/150),(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
 		creatingPlayer.setWorld(this);
@@ -102,7 +117,8 @@ public class WorldFrame extends JFrame {
 
 	
 	public void addMenu(){
-		combo.add(menu);
+		combo.add(new JLabel(new ImageIcon("Introscreen.jpg")),0,0);
+		combo.add(menu,1,0);
 	}
 	
 	public void addCreatingPlayer(){

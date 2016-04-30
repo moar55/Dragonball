@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -46,12 +47,7 @@ public class MenuScreen extends JPanel  implements ActionListener{
 		  exit = new JButton("Exit");
 		  exit.addActionListener(this);
 		 add(exit);
-//		  JLabel order = new JLabel("Please enter your player's name");
-	//	  JTextArea  playerName =new  JTextArea();
-		//  creatingPlayer.add(playerName,BorderLayout.CENTER);
-		//  JButton ok = new JButton("OK");
-		  //JButton cancel = new JButton("Cancel");
-		  //this.add(creatingPlayer);
+
 		 repaint();
 		 validate();
 		 
@@ -64,13 +60,11 @@ public class MenuScreen extends JPanel  implements ActionListener{
 		JFrame jf = new JFrame();
 		jf.add(menu);
 		jf.setVisible(true);
-		jf.setSize(600, 400);
+		jf.setSize(1280, 720);
 	
 	}
 	
 	
-	
-
 	public WorldFrame getWorld() {
 		return world;
 	}
