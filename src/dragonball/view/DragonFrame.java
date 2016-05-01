@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import dragonball.controller.GGEvent;
 import dragonball.controller.GameGUI;
 
 public class DragonFrame extends JFrame implements ActionListener {
@@ -28,7 +29,7 @@ public class DragonFrame extends JFrame implements ActionListener {
 	private JButton abilitypoints;
 	private JButton newsuperattack;
 	private JButton newultimateattack;
-	private GameGUI dragoncontroller;
+	private GameGUI controller;
 	
 public DragonFrame () throws IOException{
 	setVisible(true);
@@ -58,12 +59,12 @@ BufferedImage resizedImage = new BufferedImage(width, height, 	BufferedImage.TYP
 	  abilitypoints.addActionListener(this);
 	 add (abilitypoints);
 	 
-	 newsuperattack = new JButton("New SuperAttack");
+	 newsuperattack = new JButton("New Super Attack");
 	 newsuperattack.setBounds(22,450,220,70);
-	 abilitypoints.addActionListener(this);
-	 add (newsuperattack);
+	 newsuperattack.addActionListener(this);
+	 add(newsuperattack);
 	 
-	 newultimateattack = new JButton("New UltimateAttack");
+	 newultimateattack = new JButton("New Ultimate Attack");
 	 newultimateattack.setBounds(22,525,220,70);
 	 newultimateattack.addActionListener(this);
 	add (newultimateattack);
@@ -79,9 +80,8 @@ BufferedImage resizedImage = new BufferedImage(width, height, 	BufferedImage.TYP
 	}
 
 @Override
-public void actionPerformed(ActionEvent arg0) {
-
-	
+public void actionPerformed(ActionEvent e) {
+	controller.onEvent(new GGEvent(this,((JButton)e.getSource()).getText()));
 }
 
 public static void main(String[] args) throws IOException {
@@ -93,4 +93,14 @@ public static void main(String[] args) throws IOException {
 	D.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	D.setVisible(true);
 }
+
+public GameGUI getController() {
+	return controller;
+}
+
+public void setController(GameGUI controller) {
+	this.controller = controller;
+}
+
+
 }

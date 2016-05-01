@@ -44,7 +44,10 @@ import dragonball.model.character.fighter.Namekian;
 import dragonball.model.character.fighter.PlayableFighter;
 import dragonball.model.character.fighter.Saiyan;
 import dragonball.model.dragon.Dragon;
+import dragonball.model.dragon.DragonWish;
+import dragonball.model.dragon.DragonWishType;
 import dragonball.model.exceptions.MapIndexOutOfBoundsException;
+import dragonball.model.exceptions.NotEnoughAbilityPointsException;
 import dragonball.model.exceptions.NotEnoughKiException;
 import dragonball.model.exceptions.NotEnoughSenzuBeansException;
 import dragonball.model.exceptions.WrongTurnException;
@@ -77,7 +80,7 @@ public class GameGUI implements KeyListener ,GameListener {
 	private BattleView battle;
 	private Battle activeBattle;
 	private DragonFrame dragonframe;
-	
+	private Dragon randomDragon;
 	public GameGUI() throws IOException {
 		
 		gameEngine = new Game();
@@ -149,7 +152,11 @@ public class GameGUI implements KeyListener ,GameListener {
 			
 			else if (e.getSource() instanceof BattleView)
 				onBattle(e);
-			}
+			
+			else if (e.getSource() instanceof DragonFrame)
+				onDragon(e);
+	
+	}
 		
 		
 		public void onMenuScreen(GGEvent e) {
@@ -157,7 +164,9 @@ public class GameGUI implements KeyListener ,GameListener {
 			
 			case "New Game": gameEngine = new Game();
 							  gameEngine.setListener(this);
+							
 								clean();
+								
 								worldGUI.addCreatingPlayer();
 								worldGUI.repaint();
 								worldGUI.validate();
@@ -181,16 +190,13 @@ public class GameGUI implements KeyListener ,GameListener {
 				//Supposedly the user has entered a name and the game should start!
 							
 							clean();
+						FightersList temp=	worldGUI.getFightersList();
+						temp=new FightersList();
 							worldGUI.addFightersList();
 							String name = worldGUI.getCreatingPlayer().getJtextPlayerName();
 							gameEngine.setPlayer(new Player(name.substring(34)));
 							JOptionPane.showMessageDialog(worldGUI, "You need to create a fighter to start playing ");
-							gameEngine.getPlayer().getSuperAttacks().add(new SuperAttack("Killer", 50));
-							gameEngine.getPlayer().getSuperAttacks().add(new SuperAttack("Destroyer", 100));
-							gameEngine.getPlayer().getUltimateAttacks().add(new UltimateAttack("WOW", 200));
-							gameEngine.getPlayer().getUltimateAttacks().add(new UltimateAttack("PEW", 150)); 		
-							gameEngine.getPlayer().getUltimateAttacks().add(new SuperSaiyan());
-							gameEngine.getPlayer().getSuperAttacks().add(new MaximumCharge());
+						
 							}
 							else 
 							JOptionPane.showMessageDialog(worldGUI, "You can't set a Player with out a name! " );
@@ -267,35 +273,38 @@ public class GameGUI implements KeyListener ,GameListener {
 				
 				
 				PlayableFighter fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
-				if(fighter1.getAbilityPoints()>=1){
-				fighter1.setMaxHealthPoints(fighter1.getMaxHealthPoints()+50);
-				refreshFightersList();}
-				
-				else 
-					JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+				try{
+					gameEngine.getPlayer().upgradeFighter(fighter1, 'H');
+					refreshFightersList();
+				}
+				catch(NotEnoughAbilityPointsException nE){
+					JOptionPane.showMessageDialog(worldGUI, nE.getMessage());
+				}
+			
 				break;
 			
 			case "<html><center>"+"Upgrade"+"<br>"+"Physical"+"<br>Damage</center></html>": 
 				 fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
-				if(fighter1.getAbilityPoints()>=1){
-				fighter1.setPhysicalDamage(fighter1.getPhysicalDamage()+50);
+			try{
+				gameEngine.getPlayer().upgradeFighter(fighter1, 'P');
 				refreshFightersList();
-				}
-				else
-					JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+			}
+			catch(NotEnoughAbilityPointsException nE){
+				JOptionPane.showMessageDialog(worldGUI, nE.getMessage());
+			}
 				break;
 			
 				
 			case "<html><center>"+"Upgrade"+"<br>"+"Blast"+"<br>Damage</center></html>":
 				fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
 				
-				if(fighter1.getAbilityPoints()>=1){
-				fighter1.setBlastDamage(fighter1.getBlastDamage()+50);
+			try{
+				gameEngine.getPlayer().upgradeFighter(fighter1, 'B');
 				refreshFightersList();
-				}
-				
-				else
-					JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+			}
+			catch(NotEnoughAbilityPointsException nE){
+				JOptionPane.showMessageDialog(worldGUI, nE.getMessage());
+			}
 
 				break;
 				
@@ -303,25 +312,26 @@ public class GameGUI implements KeyListener ,GameListener {
 			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>KI</center></html>":
 				fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
 			
-			if(fighter1.getAbilityPoints()>=1){
-
-				fighter1.setMaxKi(fighter1.getMaxKi()+1);
+			try{
+				gameEngine.getPlayer().upgradeFighter(fighter1, 'K');
 				refreshFightersList();
 			}
-			else
-				JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+			catch(NotEnoughAbilityPointsException nE){
+				JOptionPane.showMessageDialog(worldGUI, nE.getMessage());
+			}
 
 					break;
 			
 			case "<html><center>"+"Upgrade"+"<br>"+"Max"+"<br>Stamina</center></html>":
 				fighter1 = gameEngine.getPlayer().getFighters().get(e.getIndex());
 				
-				if(fighter1.getAbilityPoints()>=1){
-				fighter1.setStamina(fighter1.getMaxStamina()+1);
+			try{
+				gameEngine.getPlayer().upgradeFighter(fighter1, 'S');
 				refreshFightersList();
-				}
-				else
-					JOptionPane.showMessageDialog(worldGUI, "You don't have enough ability points ! ");
+			}
+			catch(NotEnoughAbilityPointsException nE){
+				JOptionPane.showMessageDialog(worldGUI, nE.getMessage());
+			}
 				break;
 			}
 			worldGUI.repaint();
@@ -335,6 +345,7 @@ public class GameGUI implements KeyListener ,GameListener {
 			
 		}
 		public void onMap(GGEvent e){
+			System.out.println("HEY");
 			clean();
 			refreshFightersList();
 			worldGUI.addFightersList();
@@ -342,6 +353,27 @@ public class GameGUI implements KeyListener ,GameListener {
 						
 			worldGUI.setVisible(true);
 			
+		}
+		
+		
+		public void onDragon(GGEvent e ){
+			System.out.println("In the dragon method yo!");
+			switch (e.getNameOfEvent()) {
+			case "Senzu Beans": gameEngine.getPlayer().chooseWish(new DragonWish(randomDragon, DragonWishType.SENZU_BEANS,randomDragon.getAbilityPoints()));break;
+			case "Ability Points" : gameEngine.getPlayer().chooseWish(new DragonWish(randomDragon, DragonWishType.ABILITY_POINTS, randomDragon.getSenzuBeans()));break;
+			case "New Super Attack": SuperAttack superAttack= randomDragon.getSuperAttacks().get((int)(Math.random()* randomDragon.getSuperAttacks().size()));
+			gameEngine.getPlayer().chooseWish(new DragonWish(randomDragon, DragonWishType.SUPER_ATTACK,superAttack));break;
+			case "New Ultimate Attack" : UltimateAttack ultimateAttack= randomDragon.getUltimateAttacks().get((int)(Math.random()* randomDragon.getUltimateAttacks().size()));
+			gameEngine.getPlayer().chooseWish(new DragonWish(randomDragon, DragonWishType.ULTIMATE_ATTACK,ultimateAttack));break;
+
+			}
+			
+			
+			JOptionPane.showMessageDialog(worldGUI, "Great Choice!");
+			dragonframe.setVisible(false);
+			player.play();
+			map.setVisible(true);
+			map.setFocusable(true);
 		}
 		
 		public void refreshFightersList(){
@@ -428,10 +460,10 @@ public class GameGUI implements KeyListener ,GameListener {
 							}
 			
 							catch(WrongTurnException wE){
-								JOptionPane.showMessageDialog(battle, "This isn't your turn!");
+								JOptionPane.showMessageDialog(battle, wE.getMessage());
 							}	
 							catch(NotEnoughSenzuBeansException nE){
-								JOptionPane.showMessageDialog(battle, "You don't Have Enough Senzu Beans");
+								JOptionPane.showMessageDialog(battle,nE.getMessage());
 							}
 							break;
 			}
@@ -442,14 +474,14 @@ public class GameGUI implements KeyListener ,GameListener {
 				  try {
 					activeBattle.attack(gameEngine.getPlayer().getActiveFighter().getSuperAttacks().get(e.getIndex()));
 				} catch (NotEnoughKiException e1) {
-					JOptionPane.showMessageDialog(battle, "You don't have enough KI!");
+					JOptionPane.showMessageDialog(battle, e1.getMessage()+"\n(requires 1 KI)");
 				}
 			  }
 			  else if(e.getTypeofAttack() == TypeofAttack.UlTIMATE){
 					try {
 						activeBattle.attack(gameEngine.getPlayer().getActiveFighter().getUltimateAttacks().get(e.getIndex()));
 					} catch (NotEnoughKiException e1) {
-						JOptionPane.showMessageDialog(battle, "You don't have enough KI!");
+						JOptionPane.showMessageDialog(battle, e1.getMessage()+"\n(requires 3 KI)");
 					}
 			  }
 			  
@@ -664,7 +696,7 @@ public class GameGUI implements KeyListener ,GameListener {
 			gameEngine.load("SaveData.ser");
 			gameEngine.setListener(this);
 	
-			
+
 			map= new  Map(gameEngine.getWorld().getPlayerRow(), gameEngine.getWorld().getPlayerColumn(),this);
 			map.populate();
 			map.setController(this);
@@ -765,10 +797,15 @@ public class GameGUI implements KeyListener ,GameListener {
 	}
 	@Override
 	public void onDragonCalled(Dragon dragon) {
-		try{new DragonFrame();}
+		map.setVisible(false);
+		try{dragonframe=new DragonFrame();}
 		catch(Exception e){
 			JOptionPane.showMessageDialog(dragonframe, "Something went wrong!");
 		}
+		JOptionPane.showMessageDialog(dragonframe, "Hello player you have collected 7 dragon balls, choose a reward!");
+		player.pause();
+		dragonframe.setController(this);
+		randomDragon=dragon;
 		
 	}
 	@Override
@@ -777,6 +814,8 @@ public class GameGUI implements KeyListener ,GameListener {
 		transition = new MediaPlayer(new Media(Paths.get("Sounds\\pickup.wav").toUri().toString()));
 		transition.setStartTime(Duration.seconds(1));
 		transition.play();
+		String st = (collectible==Collectible.DRAGON_BALL)? "dragon ball (The orange artifact;nothing magical)": "senzu bean";
+		JOptionPane.showMessageDialog(map, "You have collected a "+ st+"!");
 		try{
 			Thread.sleep(900);
 		}
@@ -784,8 +823,7 @@ public class GameGUI implements KeyListener ,GameListener {
 			JOptionPane.showMessageDialog(map, "Something went wrong!");
 		}
 		player.play();
-		String st = (collectible==Collectible.DRAGON_BALL)? "dragon ball (The orange artifact;nothing magical)": "senzu bean";
-		JOptionPane.showMessageDialog(map, "You have collected a "+ st+"!");
+		
 		
 	}
 	
@@ -796,14 +834,26 @@ public class GameGUI implements KeyListener ,GameListener {
 		battle.getFoeStamina().setMaximum(((Fighter)activeBattle.getFoe()).getMaxStamina());
 		
 		for(SuperAttack superAttack: gameEngine.getPlayer().getActiveFighter().getSuperAttacks()){		
-		JButton temp = new JButton(superAttack.getName());
+		JButton temp ;
+		
+		if(superAttack instanceof MaximumCharge )
+		temp=new JButton(superAttack.getName());
+		else
+			temp  = new JButton(superAttack.getName() + ", attack's damage: "+superAttack.getDamage());
+		
+		temp.setName(superAttack.getName());
 		temp.addActionListener(battle);
 			battle.getSuperAttacks().add(temp);
 			
 		}
 		
 		for(UltimateAttack ultimateAttack: gameEngine.getPlayer().getActiveFighter().getUltimateAttacks()){		
-			JButton temp = new JButton(ultimateAttack.getName());
+			JButton temp;
+			if(ultimateAttack instanceof SuperSaiyan)
+			temp =  new JButton(ultimateAttack.getName());
+			else
+				temp = new JButton(ultimateAttack.getName() + ", attack's damage: "+ultimateAttack.getDamage());
+			temp.setName(ultimateAttack.getName());
 			temp.addActionListener(battle);
 			battle.getUltimateAttacks().add(temp);
 		}
@@ -823,11 +873,16 @@ public class GameGUI implements KeyListener ,GameListener {
 		}
 		
 		else if(e.getType()==BattleEventType.ENDED){
+			refreshFightersList();
+			if(e.getWinner()==activeBattle.getMe())
+				JOptionPane.showMessageDialog(battle, "You have won!");
+			else
+				JOptionPane.showMessageDialog(battle, "You have lost!");
 			battle.setVisible(false);
 			battle.dispose();
 			map.setVisible(true);
 		}
-		
+	
 		else if(e.getType()==BattleEventType.BLOCK){
 			String curent = (activeBattle.getAttacker()==activeBattle.getMe())?"You are":"Opponent is";
 
@@ -866,17 +921,17 @@ public class GameGUI implements KeyListener ,GameListener {
 				try {
 					activeBattle.play();
 				} catch (NotEnoughKiException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				
+					
 				}
-//			
+			
 //			if(activeBattle.getMe()==activeBattle.getAttacker())
 //				battle.setPlayerTurn(true);
 //			else
 //				battle.setPlayerTurn(false);
 //			
-			
 		
+	
 		}
 			
 	}

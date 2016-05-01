@@ -60,7 +60,7 @@ public class BattleView extends JFrame  implements ActionListener {
 	public BattleView(){
 		
 	this.setLayout(null);
-	
+	setTitle("Battle");
 	Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();		
 	int width  = (int)(Math.round(sizeofScreen.getWidth()));
 	int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
@@ -119,11 +119,7 @@ public class BattleView extends JFrame  implements ActionListener {
 	
 	 kiDrop = ki.getScaledInstance(width/30, height/25, Image.SCALE_DEFAULT);
 	
-//	BufferedImage resizedImage3 = new BufferedImage(width/20, height/20, BufferedImage.TYPE_INT_ARGB);
-//
-//	 g = resizedImage.createGraphics();
-//	g.drawImage(ki, (int)Math.round(width*0.80), playerStamina.getY()+height/8,width/20 , height/20, null);
-//	g.dispose();		
+
 	
 	JLabel playerKiLabel = new JLabel("Ki Bars");
 	playerKiLabel.setBounds((int)Math.round(width*0.75),playerStamina.getY()+height/17,(int)Math.round(width*0.2),(int)Math.round(height/25));
@@ -264,7 +260,12 @@ public class BattleView extends JFrame  implements ActionListener {
 		
 		
 		default :
-			if(isSuper(button)){
+			if(button.getText().equals("Block") || button.getText().equals("Use") ||button.getText().equals("Physical Attack")){
+				controller.onEvent(new GGEvent(this, button.getText()));
+				hide();
+			}
+				
+			else if(isSuper(button)){
 				System.out.println("HEH");
 				int index;
 					System.out.println("SUPPPPER!");
@@ -288,12 +289,6 @@ public class BattleView extends JFrame  implements ActionListener {
 				controller.onEvent(new GGEvent(this, TypeofAttack.UlTIMATE,findIndex(button, ultimateAttacks)));
 				hide();
 				}
-			
-			else{
-			controller.onEvent(new GGEvent(this, button.getText()));
-			hide();
-			System.out.println("NOT there!");
-			}
 		break;
 		}
 	}
@@ -311,7 +306,7 @@ public class BattleView extends JFrame  implements ActionListener {
 	public boolean isSuper(JButton b){
 		for(SuperAttack a : controller.getGameEngine().getPlayer().getActiveFighter().getSuperAttacks()){
 			String name = a.getName();
-			if(b.getText().equals(name))
+			if(b.getName().equals(name))
 			return true;
 		}
 		return false;
@@ -320,7 +315,7 @@ public class BattleView extends JFrame  implements ActionListener {
 	public boolean isUltimate(JButton b){
 		for(UltimateAttack  a : controller.getGameEngine().getPlayer().getActiveFighter().getUltimateAttacks()){
 			String name = a.getName();
-			if(b.getText().equals(name))
+			if(b.getName().equals(name))
 			return true;
 		}
 		return false;

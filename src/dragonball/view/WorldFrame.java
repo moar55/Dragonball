@@ -74,8 +74,8 @@ public class WorldFrame extends JFrame {
 //		map.setBounds(0,0,width,height);
 		menu = new MenuScreen();
 		menu.setWorld(this);
-		menu.setBounds(width/3,height/4,(int)(Math.round(width/3.2)),(int)(Math.round(height/1.8)));
-
+		menu.setBounds(0,0,width,height);
+		
 	//	combo.add(map, 0,0);
 		
 		add(menu);
@@ -114,8 +114,7 @@ public class WorldFrame extends JFrame {
 
 	
 	public void addMenu(){
-		combo.add(new JLabel(new ImageIcon("Introscreen.jpg")),0,0);
-		combo.add(menu,1,0);
+		combo.add(menu,0,0);
 	}
 	
 	public void addCreatingPlayer(){
@@ -179,7 +178,7 @@ public class WorldFrame extends JFrame {
 
 	public static void main(String[] args) throws IOException {
 		WorldFrame wf = new WorldFrame();
-		
+		wf.addMenu();
 	}
 	
 

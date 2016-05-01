@@ -1,6 +1,7 @@
 package dragonball.model.game;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -74,7 +75,7 @@ public class Game implements PlayerListener,WorldListener,BattleListener ,java.i
 		}
 		
 		
-		try{loadFoes("Database-Foes.csv");
+		try{loadFoes("Database-Foes-Range1.csv");
 		
 		}
 		catch(MissingFieldException e){
@@ -298,6 +299,13 @@ public class Game implements PlayerListener,WorldListener,BattleListener ,java.i
 				player.getActiveFighter().getUltimateAttacks().addAll(temp.getUltimateAttacks());
 				
 				if(temp.isStrong()){
+					int foesRange = (player.getMaxFighterLevel() - 1) / 10 + 1;
+					try{loadFoes("." + File.separator + "Database-Foes-Range" + foesRange + ".csv");
+					}
+					catch(Exception k){
+						
+					}
+					
 					player.setExploredMaps(player.getExploredMaps()+1);
 						world=new World();
 						world.generateMap(weakFoes, strongFoes);
