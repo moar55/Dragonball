@@ -84,6 +84,9 @@ public class GameGUI implements KeyListener ,GameListener {
 	public GameGUI() throws IOException {
 		
 		gameEngine = new Game();
+		
+		
+		
 		System.out.println("I am in the constructor");
 		Dimension sizeofScreen = Toolkit.getDefaultToolkit().getScreenSize();
 		int width  = (int)(Math.round(sizeofScreen.getWidth()));
@@ -222,9 +225,10 @@ public class GameGUI implements KeyListener ,GameListener {
 			
 			case "<html><center>"+"Super/ Ultimate"+"<br> Attacks</center></html>" :  
 				
-				System.out.println("size is " + worldGUI.getFightersList().getAttacks().size());
+				
 				PlayableFighter fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
-				worldGUI.addSuperandUltimateAttacks(fighter);
+//			worldGUI.getSuperAndUltimateAttacks().removeAll();	
+			worldGUI.addSuperandUltimateAttacks(fighter);
 				
 				
 				for(SuperAttack attack : gameEngine.getPlayer().getSuperAttacks()){
@@ -345,7 +349,12 @@ public class GameGUI implements KeyListener ,GameListener {
 			
 		}
 		public void onMap(GGEvent e){
-			System.out.println("HEY");
+			
+			int i=0;
+			for(SuperAttack attack : gameEngine.getPlayer().getSuperAttacks()){
+			System.out.println("The attack "+ i+" is "+attack.getName());
+			i++;
+			}
 			clean();
 			refreshFightersList();
 			worldGUI.addFightersList();
@@ -674,8 +683,10 @@ public class GameGUI implements KeyListener ,GameListener {
 		if(f.exists()){
 			JOptionPane.showMessageDialog(worldGUI, "Done!");
 		
+			
 			worldGUI.getCombo().repaint();
 			worldGUI.getCombo().validate();
+			
 			worldGUI.addFightersList();
 			for(PlayableFighter fighter :gameEngine.getPlayer().getFighters()){
 				worldGUI.getFightersList().addFighter(getFighterPanel(fighter));
@@ -862,10 +873,9 @@ public class GameGUI implements KeyListener ,GameListener {
 	@Override
 	public void onBattleEvent(BattleEvent e) {
 		
-		System.out.println();
 		
 		if(e.getType()==BattleEventType.STARTED){
-			map.setVisible(false);
+ 			map.setVisible(false);
 			battle= new BattleView();
 			battle.setController(this);
 			battle.setVisible(true);
@@ -890,6 +900,8 @@ public class GameGUI implements KeyListener ,GameListener {
 		}
 		
 		else if(e.getType()==BattleEventType.ATTACK){
+			if(gameEngine.getPlayer().getActiveFighter().getSuperAttacks().size()>0)
+			System.out.println("the fighter's attack is " +gameEngine.getPlayer().getActiveFighter().getSuperAttacks().get(0));
 			String curent = (activeBattle.getAttacker()==activeBattle.getMe())?"You are":"Opponent is";
 
 			JOptionPane.showMessageDialog(battle, curent + " attacking with " +e.getAttack().getName());
@@ -937,8 +949,12 @@ public class GameGUI implements KeyListener ,GameListener {
 	}
 	
 	public void moveLeft()  {
-	
+		try{
 		gameEngine.getWorld().moveLeft();	
+		}
+		catch(MapIndexOutOfBoundsException e){
+			JOptionPane.showMessageDialog(map, "You can't move there!");
+		}
 		System.out.println(gameEngine.getWorld().getPlayerColumn());
 		map.setPlayerRow(gameEngine.getWorld().getPlayerRow());
 		map.setPlayerColumn(gameEngine.getWorld().getPlayerColumn());
@@ -951,7 +967,7 @@ public class GameGUI implements KeyListener ,GameListener {
 		try{
 			gameEngine.getWorld().moveRight();
 			}
-			catch(IndexOutOfBoundsException e){
+			catch(MapIndexOutOfBoundsException e){
 				JOptionPane.showMessageDialog(map, "You can't move there!");
 			}
 		map.setPlayerRow(gameEngine.getWorld().getPlayerRow());
@@ -967,7 +983,7 @@ public class GameGUI implements KeyListener ,GameListener {
 		try{
 			gameEngine.getWorld().moveUp();
 			}
-			catch(IndexOutOfBoundsException e){
+			catch(MapIndexOutOfBoundsException e){
 				JOptionPane.showMessageDialog(map, "You can't move there!");
 			}
 		
@@ -981,7 +997,7 @@ public class GameGUI implements KeyListener ,GameListener {
 		try{
 			gameEngine.getWorld().moveDown();
 			}
-			catch(IndexOutOfBoundsException e){
+			catch(MapIndexOutOfBoundsException e){
 				JOptionPane.showMessageDialog(map, "You can't move there!");
 			}
 		map.setPlayerRow(gameEngine.getWorld().getPlayerRow());

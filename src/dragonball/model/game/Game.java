@@ -295,8 +295,17 @@ public class Game implements PlayerListener,WorldListener,BattleListener ,java.i
 			{
 				NonPlayableFighter temp = (NonPlayableFighter)((Battle)e.getSource()).getFoe();
 				player.getActiveFighter().setXp(player.getActiveFighter().getXp()+temp.getLevel()*5);
-				player.getActiveFighter().getSuperAttacks().addAll(temp.getSuperAttacks());
-				player.getActiveFighter().getUltimateAttacks().addAll(temp.getUltimateAttacks());
+				for (SuperAttack superAttack : temp.getSuperAttacks()) {
+					if (!player.getSuperAttacks().contains(superAttack)) {
+						player.getSuperAttacks().add(superAttack);
+					}
+				}
+				for (UltimateAttack ultimateAttack : temp.getUltimateAttacks()) {
+					if (!player.getUltimateAttacks().contains(ultimateAttack)) {
+						player.getUltimateAttacks().add(ultimateAttack);
+					}
+				}
+
 				
 				if(temp.isStrong()){
 					int foesRange = (player.getMaxFighterLevel() - 1) / 10 + 1;

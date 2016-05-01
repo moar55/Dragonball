@@ -210,8 +210,7 @@ public class BattleView extends JFrame  implements ActionListener {
 	superAttacks = new JLabel();
 	superAttacks.setBounds(sA.getX()-sA.getWidth()/2,playerKiLabel.getY()+height/50, sA.getX()+sA.getWidth()+sA.getWidth()/2-(sA.getX()-sA.getWidth()/2), (int)Math.round(height/2.8));
 	superAttacks.setLayout(new GridLayout(4, 0));
-
-		add(superAttacks);
+	add(superAttacks);
 	
 	
 	ultimateAttacks = new JLabel();
