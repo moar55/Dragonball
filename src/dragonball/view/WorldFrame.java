@@ -78,9 +78,6 @@ public class WorldFrame extends JFrame {
 
 	//	combo.add(map, 0,0);
 		
-		pic = ImageIO.read(new File("IntroScreen.png"));
-		
-		setContentPane(new JLabel(new ImageIcon(pic)));
 		add(menu);
 		menu.setVisible(true);
 		combo.add(menu,0,0);

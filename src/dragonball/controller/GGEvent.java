@@ -10,14 +10,20 @@ public class GGEvent extends  EventObject{
 	
 	public String nameOfEvent;
 	private int index; //This variable is for items repeated in a JPanel like JButtons with similar names for example
-	private Attack attack;
 	private Container container;
-	
+	private TypeofAttack typeofAttack;
 	public GGEvent(Object source,String nameOfEvent){
 		super(source);
 		this.nameOfEvent=nameOfEvent;
 	}
 	
+	public GGEvent(Object source,TypeofAttack typeofAttack, int index){
+		super(source);
+		this.typeofAttack= typeofAttack;
+		this.index=index;
+	}
+	
+
 	public GGEvent(Object source,String nameOfEvent,int index){
 		this(source,nameOfEvent);
 		this.index= index;
@@ -29,6 +35,8 @@ public class GGEvent extends  EventObject{
 		this.index= index;
 	}
 	
+	
+	
 
 	public String getNameOfEvent() {
 		return nameOfEvent;
@@ -39,6 +47,10 @@ public class GGEvent extends  EventObject{
 
 	public Container getContainer() {
 		return container;
+	}
+
+	public TypeofAttack getTypeofAttack() {
+		return typeofAttack;
 	}
 
 

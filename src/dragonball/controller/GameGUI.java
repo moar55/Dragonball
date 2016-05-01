@@ -23,16 +23,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
+import com.sun.swing.internal.plaf.metal.resources.metal;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import dragonball.model.attack.Attack;
 import dragonball.model.attack.MaximumCharge;
+import dragonball.model.attack.PhysicalAttack;
 import dragonball.model.attack.SuperAttack;
 import dragonball.model.attack.SuperSaiyan;
 import dragonball.model.attack.UltimateAttack;
+import dragonball.model.battle.Battle;
 import dragonball.model.battle.BattleEvent;
+import dragonball.model.battle.BattleEventType;
 import dragonball.model.cell.Collectible;
 import dragonball.model.character.fighter.Earthling;
+import dragonball.model.character.fighter.Fighter;
 import dragonball.model.character.fighter.Frieza;
 import dragonball.model.character.fighter.Majin;
 import dragonball.model.character.fighter.Namekian;
@@ -40,9 +45,13 @@ import dragonball.model.character.fighter.PlayableFighter;
 import dragonball.model.character.fighter.Saiyan;
 import dragonball.model.dragon.Dragon;
 import dragonball.model.exceptions.MapIndexOutOfBoundsException;
+import dragonball.model.exceptions.NotEnoughKiException;
+import dragonball.model.exceptions.NotEnoughSenzuBeansException;
+import dragonball.model.exceptions.WrongTurnException;
 import dragonball.model.game.Game;
 import dragonball.model.game.GameListener;
 import dragonball.model.player.Player;
+import dragonball.view.BattleView;
 import dragonball.view.ChoooseRace;
 import dragonball.view.CreatingFighter;
 import dragonball.view.CreatingPlayer;
@@ -64,7 +73,8 @@ public class GameGUI implements KeyListener ,GameListener {
 	private MediaPlayer player ;
 	private MediaPlayer transition ;
 	private Map map;
-	
+	private BattleView battle;
+	private Battle activeBattle;
 	public GameGUI() throws IOException {
 		
 		gameEngine = new Game();
@@ -74,13 +84,9 @@ public class GameGUI implements KeyListener ,GameListener {
 		int height = (int)(Math.round(sizeofScreen.getHeight()))-(int)(Math.round(sizeofScreen.getHeight()/14.4));
 		 introScreen = new JFrame("Intro");
 		 BufferedImage pic = ImageIO.read(new File("IntroScreen.png"));
-//		 BufferedReader dbi = new BufferedImage(dWidth, dHeight, imageType);
-//	        Graphics2D g = dbi.createGraphics();
-//	        AffineTransform at = AffineTransform.getScaleInstance(fWidth, fHeight);
-//	        g.drawRenderedImage(sbi, at);
+
 		pic.getScaledInstance(sizeofScreen.width, sizeofScreen.height-(int)Math.round(sizeofScreen.getHeight()/14.4), BufferedImage.TYPE_INT_ARGB);
-	//	introScreen.setContentPane(new JLabel(new ImageIcon(pic)));
-		
+
 		JFXPanel jp = new JFXPanel();
 		player = new MediaPlayer(new Media(Paths.get("IntroMusic.mp3").toUri().toString()));
 		player.play();	
@@ -114,7 +120,6 @@ public class GameGUI implements KeyListener ,GameListener {
 	}
 	public static void main(String[] args) throws IOException {
 		new GameGUI();
-	//	System.out.println(getCorresponding(2));
 	}
 
 	
@@ -139,6 +144,8 @@ public class GameGUI implements KeyListener ,GameListener {
 				onMap(e);
 		
 			
+			else if (e.getSource() instanceof BattleView)
+				onBattle(e);
 			}
 		
 		
@@ -208,8 +215,6 @@ public class GameGUI implements KeyListener ,GameListener {
 				
 				System.out.println("size is " + worldGUI.getFightersList().getAttacks().size());
 				PlayableFighter fighter = gameEngine.getPlayer().getFighters().get(e.getIndex());
-//				fighter.getSuperAttacks().add(gameEngine.getPlayer().getSuperAttacks().get(0));
-//				fighter.getSuperAttacks().add(gameEngine.getPlayer().getSuperAttacks().get(1));
 				worldGUI.addSuperandUltimateAttacks(fighter);
 				
 				
@@ -331,9 +336,7 @@ public class GameGUI implements KeyListener ,GameListener {
 			refreshFightersList();
 			worldGUI.addFightersList();
 			map.setVisible(false);
-			
-		//	worldGUI.addFightersList();
-			
+						
 			worldGUI.setVisible(true);
 			
 		}
@@ -403,7 +406,54 @@ public class GameGUI implements KeyListener ,GameListener {
 			worldGUI.repaint();
 	}
 	
-
+		public void onBattle(GGEvent e){
+			
+			if(e.getNameOfEvent()!=null){
+				System.out.println("Not null");
+			switch(e.getNameOfEvent()){
+			case "Physical Attack" : try {
+				System.out.println("HELLO");
+					activeBattle.attack(new PhysicalAttack());
+				} catch (NotEnoughKiException e1) {
+					
+				}
+			break;
+			
+			case  "Block" : activeBattle.block();break;
+			
+			case "Use" : try{activeBattle.use(gameEngine.getPlayer(), Collectible.SENZU_BEAN);
+							}
+			
+							catch(WrongTurnException wE){
+								JOptionPane.showMessageDialog(battle, "This isn't your turn!");
+							}	
+							catch(NotEnoughSenzuBeansException nE){
+								JOptionPane.showMessageDialog(battle, "You don't Have Enough Senzu Beans");
+							}
+							break;
+			}
+			}	
+			else{
+				System.out.println("IN sire!");
+			  if(e.getTypeofAttack()==TypeofAttack.SUPER){
+				  try {
+					activeBattle.attack(gameEngine.getPlayer().getActiveFighter().getSuperAttacks().get(e.getIndex()));
+				} catch (NotEnoughKiException e1) {
+					JOptionPane.showMessageDialog(battle, "You don't have enough KI!");
+				}
+			  }
+			  else if(e.getTypeofAttack() == TypeofAttack.UlTIMATE){
+					try {
+						activeBattle.attack(gameEngine.getPlayer().getActiveFighter().getUltimateAttacks().get(e.getIndex()));
+					} catch (NotEnoughKiException e1) {
+						JOptionPane.showMessageDialog(battle, "You don't have enough KI!");
+					}
+			  }
+			  
+			}
+				  
+			}
+		
 	
 	public ArrayList<JButton> getRaces(){
 		ArrayList<JButton> races = new ArrayList<JButton>();
@@ -551,7 +601,7 @@ public class GameGUI implements KeyListener ,GameListener {
 		else 
 			gameEngine.save(gameEngine.getSavePath());
 			
-			JOptionPane.showMessageDialog(worldGUI,"Game Saved!(if no bugs occured lol)");
+			JOptionPane.showMessageDialog(worldGUI,"Game Saved!");
 	}
 	
 	public JButton getSuperAttackButton(SuperAttack attack) {
@@ -659,7 +709,7 @@ public class GameGUI implements KeyListener ,GameListener {
 			switch(e.getKeyCode()){
 			
 			case KeyEvent.VK_ESCAPE : worldGUI.getCombo().remove(worldGUI.getMenu());worldGUI.setVisible(false);
-				map.setVisible(true);mapMusic();worldGUI.setFocusable(false);map.setFocusable(true);break;
+				map.setVisible(true);player.play();worldGUI.setFocusable(false);map.setFocusable(true);break;
 			}
 		}
 		
@@ -676,6 +726,7 @@ public class GameGUI implements KeyListener ,GameListener {
 					worldGUI.setVisible(true);
 					map.setFocusable(false);
 				worldGUI.setFocusable(true);
+				player.pause();
 				break;
 				
 			case KeyEvent.VK_LEFT :
@@ -720,20 +771,108 @@ public class GameGUI implements KeyListener ,GameListener {
 		transition = new MediaPlayer(new Media(Paths.get("Sounds\\pickup.wav").toUri().toString()));
 		transition.setStartTime(Duration.seconds(1));
 		transition.play();
-		try{Thread.sleep(900);
+		try{
+			Thread.sleep(900);
 		}
 		catch(Exception e){
 			JOptionPane.showMessageDialog(map, "Something went wrong!");
 		}
 		player.play();
-		String st = (collectible==Collectible.DRAGON_BALL)? "dragon ball": "senzu bean";
+		String st = (collectible==Collectible.DRAGON_BALL)? "dragon ball (The orange artifact;nothing magical)": "senzu bean";
 		JOptionPane.showMessageDialog(map, "You have collected a "+ st+"!");
 		
 	}
+	
+	public void initializeBattle(){
+		battle.getPlayerHealth().setMaximum(((Fighter)activeBattle.getMe()).getMaxHealthPoints());
+		battle.getFoeHealth().setMaximum(((Fighter)activeBattle.getFoe()).getMaxHealthPoints());
+		battle.getPlayerStamina().setMaximum(((Fighter)activeBattle.getMe()).getMaxStamina());
+		battle.getFoeStamina().setMaximum(((Fighter)activeBattle.getFoe()).getMaxStamina());
+		
+		for(SuperAttack superAttack: gameEngine.getPlayer().getActiveFighter().getSuperAttacks()){		
+		JButton temp = new JButton(superAttack.getName());
+		temp.addActionListener(battle);
+			battle.getSuperAttacks().add(temp);
+			
+		}
+		
+		for(UltimateAttack ultimateAttack: gameEngine.getPlayer().getActiveFighter().getUltimateAttacks()){		
+			JButton temp = new JButton(ultimateAttack.getName());
+			temp.addActionListener(battle);
+			battle.getUltimateAttacks().add(temp);
+		}
+	}
+	
 	@Override
 	public void onBattleEvent(BattleEvent e) {
-		// TODO Auto-generated method stub
 		
+		System.out.println();
+		
+		if(e.getType()==BattleEventType.STARTED){
+			map.setVisible(false);
+			battle= new BattleView();
+			battle.setController(this);
+			battle.setVisible(true);
+			
+		}
+		
+		else if(e.getType()==BattleEventType.ENDED){
+			battle.setVisible(false);
+			battle.dispose();
+			map.setVisible(true);
+		}
+		
+		else if(e.getType()==BattleEventType.BLOCK){
+			String curent = (activeBattle.getAttacker()==activeBattle.getMe())?"You are":"Opponent is";
+
+			JOptionPane.showMessageDialog(battle, curent + " blocking");
+		}
+		
+		else if(e.getType()==BattleEventType.ATTACK){
+			String curent = (activeBattle.getAttacker()==activeBattle.getMe())?"You are":"Opponent is";
+
+			JOptionPane.showMessageDialog(battle, curent + " attacking with " +e.getAttack().getName());
+		}
+		
+		else if (e.getType()==BattleEventType.NEW_TURN){
+			
+		
+			int playerHealthVal =((Fighter)activeBattle.getMe()).getHealthPoints();
+			
+			
+			int foeHealthVal =((Fighter)activeBattle.getFoe()).getHealthPoints();
+			
+			
+			int playerStaminaVal =((Fighter)activeBattle.getMe()).getStamina();
+			
+
+			int foeStaminaVal =((Fighter)activeBattle.getFoe()).getStamina();
+			
+			
+			int playerKi = ((Fighter)activeBattle.getMe()).getKi();
+			int foeKi  = ((Fighter)activeBattle.getFoe()).getMaxHealthPoints();
+			
+			System.out.println("my health "+playerHealthVal+" my stamina "+playerStaminaVal+ " foe health "+ foeHealthVal+ " foe stamina " +foeStaminaVal);
+			
+			battle.update(playerHealthVal, foeHealthVal, playerStaminaVal, foeStaminaVal,playerKi, foeKi);
+			
+			if(activeBattle.getAttacker()==activeBattle.getFoe())
+				try {
+					activeBattle.play();
+				} catch (NotEnoughKiException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+//			
+//			if(activeBattle.getMe()==activeBattle.getAttacker())
+//				battle.setPlayerTurn(true);
+//			else
+//				battle.setPlayerTurn(false);
+//			
+			
+		
+		}
+			
 	}
 	
 	public void moveLeft()  {
@@ -806,6 +945,11 @@ public class GameGUI implements KeyListener ,GameListener {
 		});
 	    player.play();
 	}
+	public void setActiveBattle(Battle activeBattle) {
+		this.activeBattle = activeBattle;
+	}
+	
+	
 	
 	
 }

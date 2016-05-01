@@ -65,7 +65,7 @@ public class Battle implements java.io.Serializable {
 		
 		
 		if(listener!=null)
-			listener.onBattleEvent(new BattleEvent(this, BattleEventType.ATTACK));
+			listener.onBattleEvent(new BattleEvent(this, BattleEventType.ATTACK,attack));
 		
 		endTurn();
 	}

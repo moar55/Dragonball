@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import dragonball.controller.GameGUI;
 import dragonball.model.attack.Attack;
 import dragonball.model.attack.MaximumCharge;
 import dragonball.model.attack.SuperAttack;
@@ -353,6 +354,10 @@ public class Game implements PlayerListener,WorldListener,BattleListener ,java.i
 		Battle fight=new Battle(player.getActiveFighter(),foe);
 		fight.setListener(this);
 		fight.start();
+		GameGUI  controller= (GameGUI)listener;
+		System.out.println("LOL ? ");
+		controller.setActiveBattle(fight);
+		controller.initializeBattle();
 		state=GameState.BATTLE;
 		
 	}
